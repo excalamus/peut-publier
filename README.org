@@ -1,0 +1,2 @@
+* peut-publier
+(P)eut-publier (E)nables (U)sers (T)o... publish
