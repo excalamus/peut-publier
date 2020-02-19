@@ -37,14 +37,15 @@ the export backend to use.  Default is 'html."
 ;; (setq peut-publier-default-renderer 'peut-publier-renderer-org-export)
 
 
-(defun peut-publier-render-to-html (file &optional renderer)
+(defun peut-publier-render-to-html (file &optional renderer &rest args)
   "Return html string conversion of FILE using RENDERER.
 
 The default RENDERER is `peut-publier-default-renderer'.  The
 user may provide their own RENDERER.  RENDERER must be a function
 which accepts a file and returns a string of html."
   (let ((renderer (or renderer peut-publier-default-renderer)))
-    (funcall renderer file)))
+    ;; (funcall 'renderer file args)))
+    (apply 'peut-publier-renderer-org-export file args)))
 
 
 

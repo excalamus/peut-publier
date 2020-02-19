@@ -9,7 +9,9 @@
 
 ;; "Sample post file without meta information."
 (setq peut-publier-test-post-content
-      (concat "Hello, world!\n"))
+      (concat "* Header\n"
+              "** header2\n"
+              "Hello, world!\n"))
 
 (ert-deftest peut-publier-render-to-html ()
   "Test the main rendering function."
@@ -21,3 +23,6 @@
 (provide 'peut-publier-test)
 
 ;;; peut-publier-test.el ends here
+(peut-publier-render-to-html my-file t t)
+
+(org-export-as 'html nil nil t nil)
