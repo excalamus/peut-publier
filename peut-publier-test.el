@@ -7,15 +7,6 @@
 (require 'ert)
 (require 'peut-publier)
 
-;;; Helpers
-
-(defmacro redefvar (symbol newval &optional doc)
-  "Reset the value of a symbol which was created using `defvar'.
-This function is intended only for development purposes.  Simply
-replace `defvar' with `redefvar' and SYMBOL will be assigned
-NEWVAL.  DOC will be ignored."
-  `(setq ,symbol ,newval))
-
 ;;; Variables
 
 (defvar peut-publier-test-post-content
@@ -37,9 +28,9 @@ NEWVAL.  DOC will be ignored."
 returns a string.  Use `peut-publier-default-renderer'."
 (let* ((test-file (concat (temporary-file-directory) "test-file"))
        (result (progn
-                 (with-temp-file test-file
-                   (insert peut-publier-test-post-content))
-                 (peut-publier-render-to-html test-file))))
+		 (with-temp-file test-file
+		   (insert peut-publier-test-post-content))
+		 (peut-publier-render-to-html test-file))))
   (delete-file test-file)
   (should (eq (type-of result) 'string))))
 
@@ -47,10 +38,10 @@ returns a string.  Use `peut-publier-default-renderer'."
   "Test that `peut-publier-renderer-org-export' does not output
 table of contents unless user passes t."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
-         (result (progn
-                   (with-temp-file test-file
-                     (insert peut-publier-test-post-content))
-                   (peut-publier-renderer-org-export test-file nil))))
+	 (result (progn
+		   (with-temp-file test-file
+		     (insert peut-publier-test-post-content))
+		   (peut-publier-renderer-org-export test-file nil))))
     (delete-file test-file)
     (should-not (string-match-p "id=\"table-of-contents\"" result))))
 
@@ -58,10 +49,10 @@ table of contents unless user passes t."
   "Test that `peut-publier-renderer-org-export' outputs table of
 contents when t."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
-         (result (progn
-                   (with-temp-file test-file
-                     (insert peut-publier-test-post-content))
-                   (peut-publier-renderer-org-export test-file t))))
+	 (result (progn
+		   (with-temp-file test-file
+		     (insert peut-publier-test-post-content))
+		   (peut-publier-renderer-org-export test-file t))))
     (delete-file test-file)
     (should (string-match-p "id=\"table-of-contents\"" result))))
 
@@ -69,10 +60,10 @@ contents when t."
   "Test that `peut-publier-renderer-org-export' does not output
 section numbers unless user passes t."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
-         (result (progn
-                   (with-temp-file test-file
-                     (insert peut-publier-test-post-content))
-                   (peut-publier-renderer-org-export test-file nil nil))))
+	 (result (progn
+		   (with-temp-file test-file
+		     (insert peut-publier-test-post-content))
+		   (peut-publier-renderer-org-export test-file nil nil))))
     (delete-file test-file)
     (should-not (string-match-p "class=\"section-number" result))))
 
@@ -80,10 +71,10 @@ section numbers unless user passes t."
   "Test that `peut-publier-renderer-org-export' does not output
 section numbers unless user passes t."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
-         (result (progn
-                   (with-temp-file test-file
-                     (insert peut-publier-test-post-content))
-                   (peut-publier-renderer-org-export test-file nil t))))
+	 (result (progn
+		   (with-temp-file test-file
+		     (insert peut-publier-test-post-content))
+		   (peut-publier-renderer-org-export test-file nil t))))
     (delete-file test-file)
     (should (string-match-p "class=\"section-number" result))))
 
@@ -91,12 +82,12 @@ section numbers unless user passes t."
   "Test that `peut-publier-renderer-org-export' output type 'inline-css
 generates inline-css."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
-         (result (progn
-                   (with-temp-file test-file
-                     ;; #+begin_src creates inline-css,
-                     ;; #+begin_example does not
-                     (insert peut-publier-test-post-content))
-                   (peut-publier-renderer-org-export test-file nil nil 'inline-css))))
+	 (result (progn
+		   (with-temp-file test-file
+		     ;; #+begin_src creates inline-css,
+		     ;; #+begin_example does not
+		     (insert peut-publier-test-post-content))
+		   (peut-publier-renderer-org-export test-file nil nil 'inline-css))))
     (delete-file test-file)
     (should (string-match-p (regexp-quote "span style=") result))))
 
@@ -104,12 +95,12 @@ generates inline-css."
   "Test that `peut-publier-renderer-org-export' output type 'css
 does not generate inline-css."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
-         (result (progn
-                   (with-temp-file test-file
-                     ;; #+begin_src creates inline-css,
-                     ;; #+begin_example does not
-                     (insert peut-publier-test-post-content))
-                   (peut-publier-renderer-org-export test-file nil nil 'css))))
+	 (result (progn
+		   (with-temp-file test-file
+		     ;; #+begin_src creates inline-css,
+		     ;; #+begin_example does not
+		     (insert peut-publier-test-post-content))
+		   (peut-publier-renderer-org-export test-file nil nil 'css))))
     (delete-file test-file)
     (should-not (string-match-p (regexp-quote "span style=") result))))
 
@@ -117,12 +108,12 @@ does not generate inline-css."
   "Test that `peut-publier-renderer-org-export' output type nil
 does not generate style ('inline-css) or class ('css) span tags."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
-         (result (progn
-                   (with-temp-file test-file
-                     ;; #+begin_src creates inline-css,
-                     ;; #+begin_example does not
-                     (insert peut-publier-test-post-content))
-                   (peut-publier-renderer-org-export test-file nil nil 'plain-text))))
+	 (result (progn
+		   (with-temp-file test-file
+		     ;; #+begin_src creates inline-css,
+		     ;; #+begin_example does not
+		     (insert peut-publier-test-post-content))
+		   (peut-publier-renderer-org-export test-file nil nil 'plain-text))))
     (delete-file test-file)
     (should-not (string-match-p (regexp-quote "span style=") result))
     (should-not (string-match-p (regexp-quote "span class=") result))))
@@ -131,10 +122,10 @@ does not generate style ('inline-css) or class ('css) span tags."
   "Test that `peut-publier-renderer-org-export' default backend
 is 'html."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
-         (result (progn
-                   (with-temp-file test-file
-                     (insert peut-publier-test-post-content))
-                   (peut-publier-renderer-org-export test-file nil nil nil nil))))
+	 (result (progn
+		   (with-temp-file test-file
+		     (insert peut-publier-test-post-content))
+		   (peut-publier-renderer-org-export test-file nil nil nil nil))))
     (delete-file test-file)
     (should (string-match-p (regexp-quote "</div>") result))))
 
