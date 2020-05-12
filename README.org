@@ -1,2 +1,98 @@
 * peut-publier
-(P)eut-publier (E)nables (U)sers (T)o... publish
+(P)eut-publier (E)nables (U)sers (T)o... Publish
+
+Built on Emacs, =peut-publier= aims to keep with the tradition of
+being customizable and extensible.  It doesn't force you to use a
+particular markup, impose needless complexity, or dictate your
+workflow.  It is designed to be modified.  =Peut-publier= enables you
+to publish as you see fit.
+
+** A simple static site generator
+A static website is a collection of HTML files containing links to one
+another.  The HTML describes a structure for some content.  It's
+tedious to write HTML by hand and the structure it provides is often
+uniform.  So, it makes sense to separate the content from the
+structure and use a tool, a site generator, to rejoin the two.  The
+structure should be easy to modify and the generator shouldn't care
+what the content is.
+
+Practically speaking, a web page is composed of a head and a body.
+The head has parts which never change, like a style sheet reference,
+favicon, or charset definition.  Other parts, like the title, will
+vary.  The content lives in the body and is sandwiched between a
+preamble and a postamble.  The preamble simply comes before the
+content and is often used for things like menus or banners.  The
+postamble goes after the content, such as a copyright or website
+information.
+
+#+begin_example
++--<head>----------+
+| static-head      |
+| variable-head    |
++--<body>----------+
+| body-preamble    |
+| rendered-content |
+| body-postamble   |
++------------------+
+#+end_example
+
+The head, preamble, and postamble are HTML.  The content is not, per
+se.  To ensure an HTML body, the content will need to be
+rendered/converted/transformed into HTML.  The renderer is the primary
+component of a generator. It is a black box machine in which some unit
+of content is passed in and an HTML representation of the content is
+spit out.  Otherwise, the generator must facilitate rendering, as well
+as assemble the head and body components into the individual web pages
+in such a way as to form a cohesive website.
+
+Unless you want content source to be ephemeral, the content source
+should persist on disk in some fashion.  Permanent data is typically
+stored in files. Further, since the content may be conceptually
+distinct, different pieces of content should probably be kept
+separate.  A natural separator is to use separate files for separate
+content.  Therefore, it makes sense to render files.
+
+Many files are best gathered in a single directory.  The generator
+should know about this location. It should also know where to put the
+final result.  An input and output directory need to be defined.
+
+As part of the assembly process, the generator may want to make use of
+meta-data.  That's all the info regarding the content, things like
+creation date, title, author, content categories, etc.  It might not
+be strictly necessary, but including functionality for handling
+meta-data would probably be wise.  Meta-data can live in only two
+places, in the content file or outside of it.  Storing the meta-data
+outside the file would require associating it correctly with the
+appropriate data, unless it were placed in the filename.  Since most
+file systems limit filename length, require a limited character set,
+and don't handle spaces well, storing meta-data in the filename is
+probably a bad idea.  Storing meta-data in the file, however,
+introduces a strong, natural association: the meta-data is associated
+with whatever content data is also within the file.
+
+I think that's it. i
+
+As a package, it would be nice to include conveniences like automated
+source file creation, an all-in-one render and preview option, as well
+as a way to diversify individual pages.  Depending on the content and
+meta-data, an RSS feed might be welcome.  Simple styling would also be
+a good addition.
+
+* A static site generator must:
+1. Render content
+   - allow arbitrary content format
+2. Handle file input and output
+   - source and destination paths
+   - read and write a file
+   - work with multiple files
+3. Handle meta-data
+   - extract meta-data from source files
+4. Assemble constituent parts
+
+* It'd be nice to have:
+5. [@5] Conveniences
+   - ability to have different page layouts
+   - automated source file creation
+   - all-in-one renderer and preview option
+   - RSS feed
+   - a style sheet
