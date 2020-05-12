@@ -1,13 +1,12 @@
 * peut-publier
-(P)eut-publier (E)nables (U)sers (T)o... Publish
-
+** (P)eut-publier (E)nables (U)sers (T)o... Publish
 Built on Emacs, =peut-publier= aims to keep with the tradition of
 being customizable and extensible.  It doesn't force you to use a
 particular markup, impose needless complexity, or dictate your
 workflow.  It is designed to be modified.  =Peut-publier= enables you
 to publish as you see fit.
 
-** A simple static site generator
+** A recipe for a simple static site generator
 A static website is a collection of HTML files containing links to one
 another.  The HTML describes a structure for some content.  It's
 tedious to write HTML by hand and the structure it provides is often
@@ -70,13 +69,7 @@ probably a bad idea.  Storing meta-data in the file, however,
 introduces a strong, natural association: the meta-data is associated
 with whatever content data is also within the file.
 
-I think that's it. i
-
-As a package, it would be nice to include conveniences like automated
-source file creation, an all-in-one render and preview option, as well
-as a way to diversify individual pages.  Depending on the content and
-meta-data, an RSS feed might be welcome.  Simple styling would also be
-a good addition.
+I think that's it.
 
 * A static site generator must:
 1. Render content
@@ -90,9 +83,11 @@ a good addition.
 4. Assemble constituent parts
 
 * It'd be nice to have:
+As a package, it would be nice to include some conveniences.
+
 5. [@5] Conveniences
    - ability to have different page layouts
+   - a style sheet
    - automated source file creation
    - all-in-one renderer and preview option
    - RSS feed
-   - a style sheet
