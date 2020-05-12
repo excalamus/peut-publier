@@ -7,7 +7,7 @@
 (require 'ert)
 (require 'peut-publier)
 
-;;; Variables
+;;; Variables:
 
 (defvar peut-publier-test-post-content
   (concat
@@ -21,7 +21,7 @@
    "#+end_src\n")
   "Sample post file without meta information.")
 
-;;; Tests
+;;; Tests:
 
 (ert-deftest peut-publier-test-render-to-html ()
   "Test that `peut-publier-render-to-html' accepts a file and

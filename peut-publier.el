@@ -10,18 +10,24 @@
 
 ;;; Code:
 
-(require 'org)
+;;; Requirements:
 
-;; needed for peut-publier-renderer-org-export
-(require 'ox) ;; org-html-htmlize-output-type
-(require 'cl-macs)  ;; cl-defun
+;; for default renderer
+(require 'org)
+(require 'ox)       ; org-html-htmlize-output-type
+(require 'cl-macs)  ; cl-defun
+
+;;; Variables:
 
 (defvar peut-publier-default-renderer #'peut-publier-renderer-org-export
-  "Default renderer function to be used with
-`peut-publier-render-to-html'.")
+  "Default renderer function.
+
+Used with `peut-publier-render-to-html'.")
+
+;;; Functions:
 
 (cl-defun peut-publier-renderer-org-export (file &optional toc section-num (output-type 'css) (backend 'html))
-  "Convert FILE to html string.
+  "Convert Org FILE to html string.
 
 TOC and SECTION-NUM generate a table of contents and section
 numbers, respectively.  Both default to nil.
