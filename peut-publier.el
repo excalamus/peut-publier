@@ -10,20 +10,56 @@
 
 ;;; Code:
 
+
 ;;; Requirements:
 
-;; for default renderer
-(require 'org)
+;; default renderer
+(require 'org)      ; org-export-as
 (require 'ox)       ; org-html-htmlize-output-type
 (require 'cl-macs)  ; cl-defun
 
-;;; Variables:
+
+;;; Variables
+
+
+;;;; Internal:
+
+(defvar peut-publier--regexp-nonwhitespace "[^[:space:]]"
+  "Regular expression for non-whitespace character.
+
+[^...]    complemented character set; match anything 'not' these
+[:space:] whitespace characters (see Info node `(elisp) Char Classes')
+
+See Info node `(emacs) Regexps' for more details unless noted
+otherwise.")
+
+(defvar peut-publier--regexp-blank-line "^[[:blank:]]$"
+  "Regular expression for a line empty or full of whitespace.
+
+^         beginning of line
+[...]     character set
+[:blank:] 'blank' characters (see Info node `(elisp) Char Classes')
+*         zero or more of the preceding character
+$         end of line
+
+See Info node `(emacs) Regexps' for more details unless noted
+otherwise.")
+
+
+;;;; Public:
 
 (defvar peut-publier-default-renderer #'peut-publier-renderer-org-export
   "Default renderer function.
 
 Used with `peut-publier-render-to-html'.")
 
+(defvar peut-publier-meta-data-start ""
+  "Start delimiter for meta data.")
+
+(defvar peut-publier-meta-data-end peut-publier--regexp-blank-line
+  "End delimiter for meta data.")
+
+
 ;;; Functions:
 
 (cl-defun peut-publier-renderer-org-export (file &optional toc section-num (output-type 'css) (backend 'html))
@@ -48,9 +84,9 @@ related backends are supported by peut-publier.
 ;; defaults and cannot be nil. See
 ;; https://emacs.stackexchange.com/questions/55684/
   (let* ((org-export-with-toc toc)
-         (org-export-with-section-numbers section-num)
-         (org-html-htmlize-output-type output-type)
-         (backend (or backend 'html)))
+	 (org-export-with-section-numbers section-num)
+	 (org-html-htmlize-output-type output-type)
+	 (backend (or backend 'html)))
     (with-temp-buffer
       (insert-file-contents-literally file)
       (org-export-as backend nil nil t nil))))

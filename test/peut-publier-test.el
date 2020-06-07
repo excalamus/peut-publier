@@ -2,11 +2,13 @@
 
 ;;; Commentary:
 
+
 ;;; Code:
 
 (require 'ert)
 (require 'peut-publier)
 
+
 ;;; Variables:
 
 (defvar peut-publier-test-post-content
@@ -22,6 +24,9 @@
   "Sample post file without meta information.")
 
 ;;; Tests:
+
+
+;;;; Renderer
 
 (ert-deftest peut-publier-test-render-to-html ()
   "Test that `peut-publier-render-to-html' accepts a file and
