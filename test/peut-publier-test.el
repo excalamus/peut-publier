@@ -42,16 +42,16 @@
 
 ;;;; Renderer
 
-;; (ert-deftest peut-publier-test-render-to-html ()
-;;   "Test that `peut-publier-render-to-html' accepts a file and
-;; returns a string.  Use `peut-publier-default-renderer'."
-;; (let* ((test-file (concat (temporary-file-directory) "test-file"))
-;;        (result (progn
-;;		 (with-temp-file test-file
-;;		   (insert peut-publier-test-post-content))
-;;		 (peut-publier-render-to-html test-file))))
-;;   (delete-file test-file)
-;;   (should (eq (type-of result) 'string))))
+(ert-deftest peut-publier-test-render-to-html ()
+  "Test that `peut-publier-render-to-html' converts a file to
+html string.  Uses `peut-publier-default-renderer'."
+(let* ((test-file (concat (temporary-file-directory) "test-file"))
+       (result (progn
+                 (with-temp-file test-file
+                   (insert peut-publier-test-post-content))
+                 (peut-publier-render-to-html test-file))))
+  (delete-file test-file)
+    (should (string-match-p (regexp-quote "</p>") result))))
 
 (ert-deftest peut-publier-test-renderer-org-export-toc-nil ()
   "Test that `peut-publier-renderer-org-export' does not output
