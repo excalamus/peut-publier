@@ -35,7 +35,7 @@ Meaning:
 See Info node `(emacs) Regexps' for more details unless noted
 otherwise.")
 
-(defvar peut-publier--regexp-blank-line "^[[:blank:]]$"
+(defvar peut-publier--regexp-blank-line "^[[:blank:]]*$"
   "Regular expression for a line empty or full of whitespace.
 
 Meaning:
@@ -58,23 +58,27 @@ otherwise.")
 Used with `peut-publier-render-to-html'.")
 
 (defvar peut-publier-meta-data-start ""  ; beginning of file
-  "Start delimiter for meta data.")
+  "Start delimiter for meta data relative to beginning of file.")
 
 (defvar peut-publier-meta-data-end peut-publier--regexp-blank-line
-  "End delimiter for meta data.")
+  "End delimiter for meta data relative to beginning of file.")
 
 
 ;;; Functions:
 
 (defun peut-publier-strip-meta-data (file &optional start end)
-  "Return contents of FILE with meta-data removed.
+  "Return contents of FILE with region between START and END removed.
 
-Meta-data is the region between START and END.  Defaults are
-`peut-publier-meta-data-start' and `peut-publier-meta-data-end'."
-  (let* (())
-
-    )
-)
+Meta-data is the region between START and END.  Defaults
+correspond to `peut-publier-meta-data-start' and
+`peut-publier-meta-data-end'."
+  (with-temp-buffer
+    (insert-file-contents-literally file)
+    (goto-char (point-min))
+    (let* ((start (or start (search-forward-regexp peut-publier-meta-data-start)))
+           (end (or end (search-forward-regexp peut-publier-meta-data-end))))
+      (delete-region start end)
+      (buffer-string))))
 
 (cl-defun peut-publier-renderer-org-export (string &optional toc section-num (output-type 'css) (backend 'html))
   "Convert STRING from Org syntax to html.

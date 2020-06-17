@@ -104,6 +104,7 @@ is 'html."
 
 
 ;;; Meta-data
+
 (ert-deftest peut-publier-test-strip-meta-data ()
   "Test that meta-data is removed and the content returned."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
@@ -112,7 +113,7 @@ is 'html."
                      (insert peut-publier-test-post-content))
                    (peut-publier-strip-meta-data test-file)))
     (delete-file test-file)
-    (should (string-equal peut-publier-test-post-meta-data result)))))
+    (should (string-equal peut-publier-test-post-content result)))))
 
 (provide 'peut-publier-test)
 
