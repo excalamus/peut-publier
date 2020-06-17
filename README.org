@@ -107,12 +107,59 @@ Markdown now, and don't want to convert formats.  It's easy to write a
 generator by baking in the format.
 
 It's also easy to write a generator that doesn't care about the
-format. Just have it work only with a string of HTML since that's what
-is ultimately needed.  Leave the HTML conversion to the author of the
+format. Just have it output a string of HTML since that's what is
+ultimately needed.  Leave the HTML conversion to the author of the
 markup language (or to pandoc).  When written in this way, the markup
 language becomes interchangeable.
 
+The meta-data is alongside content within the file. There are two
+general steps: process source (convert) and post-process (index).
+These could happen at once or separately.  If happening at once,
+post-processing would require processing.  Yet, it's conceivable that
+you might want to post-process independently. For example, assemble an
+index of pages for a new page that was created; this shouldn't require
+reprocessing all other pagex.  The tasks are separate and are likely
+more flexible when kept independent.
+
+The source could be split into meta-data and content, with each part
+sent its own way at that time.  But time would be a component.
+Although itbmay be inefficient to access a fike multiple times, this
+allows for arbitrary access to information.  The latter appears more
+flexible.
+
+There's a symmetric relationship:
+- Get meta-data/strip content (meta-data parser)
+- Strip meta-data/Get content (renderer)
+
+The renderer function gets the content and acts on it, converting.
+The meta-data function gets the meta-data and acts on it, parsing.
+
+Could operate on:
+- file
+- string
+- buffer
+
+
 ** 2. File handling
+A post file has three parts, the name, the content, and the meta-data.
+The content needs to be rendered, the meta-data parsed.  The two must
+be separated.
+
+The renderer ideally shouldn't be doing the separating.  Its job is to
+convert.
+
+- work with files
+- process-send-string
+- shell-command-to-string
+
+There's not a good answer for what functions should operate on: file,
+string, or buffer.
+
+If a file is chosen, then the renderer must strip the meta-data.
+
+Refactor peut-publier-render-to-html to strip meta data.
+
+Have the renderer take a string (or file) and return string.
 
 ** 3. Meta-data
 Meta-data is information about the content, such as the title, an

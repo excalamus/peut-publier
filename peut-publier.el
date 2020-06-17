@@ -27,14 +27,18 @@
 (defvar peut-publier--regexp-nonwhitespace "[^[:space:]]"
   "Regular expression for non-whitespace character.
 
-[^...]    complemented character set; match anything 'not' these
-[:space:] whitespace characters (see Info node `(elisp) Char Classes')
+Meaning:
+
+[^...]     complemented character set; match anything 'not these''
+[:space:]  whitespace characters (see Info node `(elisp) Char Classes')
 
 See Info node `(emacs) Regexps' for more details unless noted
 otherwise.")
 
 (defvar peut-publier--regexp-blank-line "^[[:blank:]]$"
   "Regular expression for a line empty or full of whitespace.
+
+Meaning:
 
 ^         beginning of line
 [...]     character set
@@ -46,14 +50,14 @@ See Info node `(emacs) Regexps' for more details unless noted
 otherwise.")
 
 
-;;;; Public:
+;;;; User:
 
 (defvar peut-publier-default-renderer #'peut-publier-renderer-org-export
   "Default renderer function.
 
 Used with `peut-publier-render-to-html'.")
 
-(defvar peut-publier-meta-data-start ""
+(defvar peut-publier-meta-data-start ""  ; beginning of file
   "Start delimiter for meta data.")
 
 (defvar peut-publier-meta-data-end peut-publier--regexp-blank-line
@@ -61,6 +65,16 @@ Used with `peut-publier-render-to-html'.")
 
 
 ;;; Functions:
+
+(defun peut-publier-strip-meta-data (file &optional start end)
+  "Return contents of FILE with meta-data removed.
+
+Meta-data is the region between START and END.  Defaults are
+`peut-publier-meta-data-start' and `peut-publier-meta-data-end'."
+  (let* (())
+
+    )
+)
 
 (cl-defun peut-publier-renderer-org-export (file &optional toc section-num (output-type 'css) (backend 'html))
   "Convert Org FILE to html string.

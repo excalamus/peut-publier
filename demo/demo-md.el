@@ -33,15 +33,15 @@
  (shell-command-to-string (concat "hoedown " file)))
 
 ;; redefine the peut-publier-default-renderer as a user defined
-;; markdown engine.  In real life, this would simply bedone with:
+;; markdown engine.  In real life, this would simply be done with:
 ;;
 ;; (setq peut-publier-default-renderer #'peut-publier-demo-md-renderer)
 (let* ((test-file (concat (temporary-file-directory) "test-file"))
-	(peut-publier-default-renderer #'peut-publier-demo-md-renderer)
-	(result (progn
-		(with-temp-file test-file
-		    (insert peut-publier-demo-md-content))
-		(peut-publier-render-to-html test-file))))
+        (peut-publier-default-renderer #'peut-publier-demo-md-renderer)
+        (result (progn
+                (with-temp-file test-file
+                    (insert peut-publier-demo-md-content))
+                (peut-publier-render-to-html test-file))))
   (delete-file test-file)
   (if (string-match-p result peut-publier-demo-expected-output)
       (message "It rendered as expected!")
