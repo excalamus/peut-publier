@@ -76,8 +76,8 @@ Meta-data is the region between START and END.  Defaults are
     )
 )
 
-(cl-defun peut-publier-renderer-org-export (file &optional toc section-num (output-type 'css) (backend 'html))
-  "Convert Org FILE to html string.
+(cl-defun peut-publier-renderer-org-export (string &optional toc section-num (output-type 'css) (backend 'html))
+  "Convert STRING from Org syntax to html.
 
 TOC and SECTION-NUM generate a table of contents and section
 numbers, respectively.  Both default to nil.
@@ -92,17 +92,17 @@ BACKEND is an `org-export-as' export backend.  Default is 'html.
 While other values, such as 'latex may produce output, only html
 related backends are supported by peut-publier.
 
-\(fn FILE &optional TOC SECTION-NUM OUTPUT-TYPE BACKEND)"
+\(fn STRING &optional TOC SECTION-NUM OUTPUT-TYPE BACKEND)"
 ;; 'toc'and 'sec-num' do not need a default value and can be nil,
 ;; 'output-type' needs a default and can be nil, 'backend' need
 ;; defaults and cannot be nil. See
 ;; https://emacs.stackexchange.com/questions/55684/
   (let* ((org-export-with-toc toc)
-	 (org-export-with-section-numbers section-num)
-	 (org-html-htmlize-output-type output-type)
-	 (backend (or backend 'html)))
+         (org-export-with-section-numbers section-num)
+         (org-html-htmlize-output-type output-type)
+         (backend (or backend 'html)))
     (with-temp-buffer
-      (insert-file-contents-literally file)
+      (insert string)
       (org-export-as backend nil nil t nil))))
 
 (defun peut-publier-render-to-html (file &optional renderer &rest rargs)
