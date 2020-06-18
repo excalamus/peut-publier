@@ -115,6 +115,16 @@ is 'html."
     (delete-file test-file)
     (should (string-equal peut-publier-test-post-content result)))))
 
+(ert-deftest peut-publier-test-get-meta-data ()
+  "Test that meta-data is returned."
+  (let* ((test-file (concat (temporary-file-directory) "test-file"))
+         (result (progn
+                   (with-temp-file test-file
+                     (insert peut-publier-test-post-content))
+                   (peut-publier-get-meta-data test-file)))
+    (delete-file test-file)
+    (should (string-equal peut-publier-test-post-meta-data result))))
+
 (provide 'peut-publier-test)
 
 ;;; peut-publier-test.el ends here

@@ -80,6 +80,19 @@ correspond to `peut-publier-meta-data-start' and
       (delete-region start end)
       (buffer-string))))
 
+(defun peut-publier-get-meta-data (file &optional start end)
+  "Return meta-data between START and END in FILE.
+
+Default START and END correspond to
+`peut-publier-meta-data-start' and `peut-publier-meta-data-end'."
+  (with-temp-buffer
+    (insert-file-contents-literally file)
+    (goto-char (point-min))
+    (let* ((start (or start (search-forward-regexp peut-publier-meta-data-start)))
+           (end (or end (search-forward-regexp peut-publier-meta-data-end))))
+      (kill-region start end)
+      (pop kill-ring))))
+
 (cl-defun peut-publier-renderer-org-export (string &optional toc section-num (output-type 'css) (backend 'html))
   "Convert STRING from Org syntax to html.
 
