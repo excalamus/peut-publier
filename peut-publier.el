@@ -129,8 +129,9 @@ The default RENDERER is `peut-publier-default-renderer'.  The
 user may provide their own RENDERER.  A RENDERER is a function
 which accepts a file, returns an html string, and may accept
 RARGS."
-  (let ((renderer (or renderer peut-publier-default-renderer)))
-    (apply renderer file rargs)))
+  (let ((renderer (or renderer peut-publier-default-renderer))
+        (content (peut-publier-strip-meta-data file)))
+    (apply renderer content rargs)))
 
 (provide 'peut-publier)
 
