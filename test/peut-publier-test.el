@@ -51,7 +51,7 @@ html string.  Uses `peut-publier-default-renderer'."
                    (insert peut-publier-test-post-content))
                  (peut-publier-render-to-html test-file))))
   (delete-file test-file)
-    (should (string-match-p (regexp-quote "</p>") result))))
+    (should (string-match-p (regexp-quote "</div>") result))))
 
 (ert-deftest peut-publier-test-renderer-org-export-toc-nil ()
   "Test that `peut-publier-renderer-org-export' does not output
