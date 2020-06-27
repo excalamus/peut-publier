@@ -74,8 +74,8 @@ Used with `peut-publier-get-keyword-value'.")
 (defun peut-publier-strip-meta-data (file &optional start end)
   "Return contents of FILE with region between START and END removed.
 
-Meta-data is the region between START and END.  Defaults
-correspond to `peut-publier-meta-data-start' and
+Meta-data is the region between START and END.  Default START and
+END correspond to `peut-publier-meta-data-start' and
 `peut-publier-meta-data-end'."
   (with-temp-buffer
     (insert-file-contents-literally file)
@@ -98,19 +98,23 @@ Default START and END correspond to
       (buffer-substring-no-properties start end))))
 
 (defun peut-publier-parse-org-meta-data (data)
-  "Parse Org formatted meta DATA into an alist."
+  "Parse Org formatted meta DATA into an alist.
+
+Keywords are the '#+' options given within an Org file.  These
+are things like TITLE, DATE, and FILETAGS.  Keywords are
+case-sensitive!.  Values are whatever remains on that line."
   (with-temp-buffer
     (insert data)
     (org-element-map (org-element-parse-buffer 'element) 'keyword
-    (lambda (x) (cons (org-element-property :key x)
-                      (org-element-property :value x))))))
+      (lambda (x) (cons (org-element-property :key x)
+                        (org-element-property :value x))))))
 
 (defun peut-publier-get-keyword-value (key file &optional parser)
   "Get KEY value from FILE meta data using PARSER.
 
 PARSER must accept a string and return an alist.  The
 `peut-publier-default-meta-data-parser' is used when no PARSER is
-provided."
+given."
   (let* ((meta-data (peut-publier-get-meta-data file))
          (parser (or parser peut-publier-default-meta-data-parser))
          (kv-list (funcall parser meta-data)))
