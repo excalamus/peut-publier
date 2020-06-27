@@ -12,7 +12,7 @@
 - [[#beyond-simple][Beyond simple]]
 - [[#footnotes][Footnotes]]
 
-* *P*\eut-publier *e*\nables *u*\sers *t*\o...
+* *P*eut-publier *E*nables *U*sers *T*o...
 Build a website.  Use the markup language you want, according to your
 workflow.  Take control of the system and direct its behavior.  Modify
 it instead of you.
