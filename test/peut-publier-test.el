@@ -123,7 +123,27 @@ is 'html."
                      (insert peut-publier-test-post-content))
                    (peut-publier-get-meta-data test-file)))
     (delete-file test-file)
-    (should (string-equal peut-publier-test-post-meta-data result))))
+    (should (string-equal peut-publier-test-post-meta-data result)))))
+
+(ert-deftest peut-publier-test-parse-org-meta-data ()
+  "Test that Org meta-data is correctly parsed into an alist."
+  (let ((result (peut-publier-parse-org-meta-data
+                 peut-publier-test-post-meta-data)))
+    (should (equal '(("TITLE" . "Test post")
+                     ("AUTHOR" . "Excalamus")
+                     ("TAGS" . "blogging tests"))
+                   result))))
+
+(ert-deftest peut-publier-test-get-keyword-value ()
+  "Test that values can be extracted from meta-data via key."
+  (let* ((test-file (concat (temporary-file-directory) "test-file"))
+         (result (progn
+                   (with-temp-file test-file
+                     (insert peut-publier-test-post-content))
+                   (peut-publier-get-keyword-value test-file "TITLE")))
+    (delete-file test-file)
+    (should (string-equal "Test post" result)))))
+
 
 (provide 'peut-publier-test)
 

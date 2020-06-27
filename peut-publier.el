@@ -63,6 +63,11 @@ Used with `peut-publier-render-to-html'.")
 (defvar peut-publier-meta-data-end peut-publier--regexp-blank-line
   "End delimiter for meta data relative to beginning of file.")
 
+(defvar peut-publier-default-meta-data-parser #'peut-publier-parse-org-meta-data
+  "Default meta data parser.
+
+Used with `peut-publier-get-keyword-value'.")
+
 
 ;;; Functions:
 
@@ -93,6 +98,24 @@ Default START and END correspond to
       (kill-region start end)
       (pop kill-ring))))
 
+(defun peut-publier-parse-org-meta-data (data)
+  "Parse Org formatted meta DATA into an alist."
+  (with-temp-buffer
+    (insert data)
+    (org-element-map (org-element-parse-buffer 'element) 'keyword
+    (lambda (x)
+        (cons (org-element-property :key x)
+            (org-element-property :value x))))))
+
+(defun peut-publier-get-keyword-value (key file &optional parser)
+  "Get KEY value from FILE meta data using PARSER."
+  (let ((meta-data (peut-publier-get-meta-data file) )))
+  )
+
+;; todo change this from renderer-org-export to
+;; render-org-to-html. The former gives the mechanism, the latter a
+;; description of the action this function performs.  If anyone cares
+;; that the org-export facility is used, they can see that in the source
 (cl-defun peut-publier-renderer-org-export (string &optional toc section-num (output-type 'css) (backend 'html))
   "Convert STRING from Org syntax to html.
 
