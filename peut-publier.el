@@ -95,8 +95,7 @@ Default START and END correspond to
     (goto-char (point-min))
     (let* ((start (or start (search-forward-regexp peut-publier-meta-data-start)))
            (end (or end (search-forward-regexp peut-publier-meta-data-end))))
-      (kill-region start end)
-      (pop kill-ring))))
+      (buffer-substring-no-properties start end))))
 
 (defun peut-publier-parse-org-meta-data (data)
   "Parse Org formatted meta DATA into an alist."
