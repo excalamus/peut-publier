@@ -2,7 +2,7 @@
 #+STARTUP: showall
 
 * peut-publier                                                          :TOC:
-- [[#peut-publier-enables-users-to-publish][(P)eut-publier (E)nables (U)sers (T)o... Publish]]
+- [[#peut-publier-enables-users-to-publish][*P*eut-publier *e*nables *u*sers *t*o... publish]]
 - [[#background][Background]]
   - [[#recipe-for-a-simple-static-site-generator][Recipe for a simple static site generator]]
   - [[#1-renderer][1. Renderer]]
@@ -12,11 +12,11 @@
 - [[#beyond-simple][Beyond simple]]
 - [[#footnotes][Footnotes]]
 
-* (P)eut-publier (E)nables (U)sers (T)o... Publish
-Built on Emacs, =peut-publier= aims to keep with the tradition of
-being customizable and extensible.  It is designed to be modified. It
-doesn't force you to use a particular markup, impose needless
-complexity, or dictate your workflow.
+* *P*eut-publier *e*nables *u*sers *t*o... publish
+Use =peut-publier= to create a blog or website.  It doesn't force you
+to into a particular markup, impose needless complexity, or dictate
+your workflow.  Like Emacs, =peut-publier= is customizable and
+extensible.  Modify it instead of you.
 
 =peut-publier= enables you to publish as you see fit.
 
