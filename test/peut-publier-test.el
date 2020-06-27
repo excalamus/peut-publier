@@ -53,53 +53,53 @@ html string.  Uses `peut-publier-default-renderer'."
   (delete-file test-file)
     (should (string-match-p (regexp-quote "</div>") result))))
 
-(ert-deftest peut-publier-test-renderer-org-export-toc-nil ()
-  "Test that `peut-publier-renderer-org-export' does not output
+(ert-deftest peut-publier-test-render-org-to-html-toc-nil ()
+  "Test that `peut-publier-render-org-to-html' does not output
 table of contents unless user passes t."
-  (let* ((result (peut-publier-renderer-org-export peut-publier-test-post nil)))
+  (let* ((result (peut-publier-render-org-to-html peut-publier-test-post nil)))
     (should-not (string-match-p "id=\"table-of-contents\"" result))))
 
-(ert-deftest peut-publier-test-renderer-org-export-toc-t ()
-  "Test that `peut-publier-renderer-org-export' outputs table of
+(ert-deftest peut-publier-test-render-org-to-html-toc-t ()
+  "Test that `peut-publier-render-org-to-html' outputs table of
 contents when t."
-  (let* ((result (peut-publier-renderer-org-export peut-publier-test-post t)))
+  (let* ((result (peut-publier-render-org-to-html peut-publier-test-post t)))
     (should (string-match-p "id=\"table-of-contents\"" result))))
 
-(ert-deftest peut-publier-test-renderer-org-export-section-num-nil ()
-  "Test that `peut-publier-renderer-org-export' does not output
+(ert-deftest peut-publier-test-render-org-to-html-section-num-nil ()
+  "Test that `peut-publier-render-org-to-html' does not output
 section numbers unless user passes t."
-  (let* ((result (peut-publier-renderer-org-export peut-publier-test-post nil nil)))
+  (let* ((result (peut-publier-render-org-to-html peut-publier-test-post nil nil)))
     (should-not (string-match-p "class=\"section-number" result))))
 
-(ert-deftest peut-publier-test-renderer-org-export-section-num-t ()
-  "Test that `peut-publier-renderer-org-export' does not output
+(ert-deftest peut-publier-test-render-org-to-html-section-num-t ()
+  "Test that `peut-publier-render-org-to-html' does not output
 section numbers unless user passes t."
-  (let* ((result (peut-publier-renderer-org-export peut-publier-test-post nil t)))
+  (let* ((result (peut-publier-render-org-to-html peut-publier-test-post nil t)))
     (should (string-match-p "class=\"section-number" result))))
 
-(ert-deftest peut-publier-test-renderer-org-export-inline-css ()
-  "Test that `peut-publier-renderer-org-export' output type 'inline-css
+(ert-deftest peut-publier-test-render-org-to-html-inline-css ()
+  "Test that `peut-publier-render-org-to-html' output type 'inline-css
 generates inline-css."
-  (let* ((result (peut-publier-renderer-org-export peut-publier-test-post nil nil 'inline-css)))
+  (let* ((result (peut-publier-render-org-to-html peut-publier-test-post nil nil 'inline-css)))
     (should (string-match-p (regexp-quote "span style=") result))))
 
-(ert-deftest peut-publier-test-renderer-org-export-css ()
-  "Test that `peut-publier-renderer-org-export' output type 'css
+(ert-deftest peut-publier-test-render-org-to-html-css ()
+  "Test that `peut-publier-render-org-to-html' output type 'css
 does not generate inline-css."
-  (let* ((result (peut-publier-renderer-org-export peut-publier-test-post nil nil 'css)))
+  (let* ((result (peut-publier-render-org-to-html peut-publier-test-post nil nil 'css)))
     (should-not (string-match-p (regexp-quote "span style=") result))))
 
-(ert-deftest peut-publier-test-renderer-org-export-plain-text ()
-  "Test that `peut-publier-renderer-org-export' output type nil
+(ert-deftest peut-publier-test-render-org-to-html-plain-text ()
+  "Test that `peut-publier-render-org-to-html' output type nil
 does not generate style ('inline-css) or class ('css) span tags."
-  (let* ((result (peut-publier-renderer-org-export peut-publier-test-post nil nil nil)))
+  (let* ((result (peut-publier-render-org-to-html peut-publier-test-post nil nil nil)))
     (should-not (string-match-p (regexp-quote "span style=") result))
     (should-not (string-match-p (regexp-quote "span class=") result))))
 
-(ert-deftest peut-publier-test-renderer-org-export-default-backend ()
-  "Test that `peut-publier-renderer-org-export' default backend
+(ert-deftest peut-publier-test-render-org-to-html-default-backend ()
+  "Test that `peut-publier-render-org-to-html' default backend
 is 'html."
-  (let* ((result (peut-publier-renderer-org-export peut-publier-test-post nil nil nil nil)))
+  (let* ((result (peut-publier-render-org-to-html peut-publier-test-post nil nil nil nil)))
     (should (string-match-p (regexp-quote "</div>") result))))
 
 

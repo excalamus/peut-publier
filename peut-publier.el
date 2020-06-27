@@ -52,7 +52,7 @@ otherwise.")
 
 ;;;; User:
 
-(defvar peut-publier-default-renderer #'peut-publier-renderer-org-export
+(defvar peut-publier-default-renderer #'peut-publier-render-org-to-html
   "Default renderer function.
 
 Used with `peut-publier-render-to-html'.")
@@ -116,11 +116,7 @@ provided."
          (kv-list (funcall parser meta-data)))
     (cdr (assoc key kv-list))))
 
-;; todo change this from renderer-org-export to
-;; render-org-to-html. The former gives the mechanism, the latter a
-;; description of the action this function performs.  If anyone cares
-;; that the org-export facility is used, they can see that in the source
-(cl-defun peut-publier-renderer-org-export (string &optional toc section-num (output-type 'css) (backend 'html))
+(cl-defun peut-publier-render-org-to-html (string &optional toc section-num (output-type 'css) (backend 'html))
   "Convert STRING from Org syntax to html.
 
 TOC and SECTION-NUM generate a table of contents and section
