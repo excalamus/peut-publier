@@ -103,14 +103,19 @@ Default START and END correspond to
   (with-temp-buffer
     (insert data)
     (org-element-map (org-element-parse-buffer 'element) 'keyword
-    (lambda (x)
-        (cons (org-element-property :key x)
-            (org-element-property :value x))))))
+    (lambda (x) (cons (org-element-property :key x)
+                      (org-element-property :value x))))))
 
 (defun peut-publier-get-keyword-value (key file &optional parser)
-  "Get KEY value from FILE meta data using PARSER."
-  (let ((meta-data (peut-publier-get-meta-data file) )))
-  )
+  "Get KEY value from FILE meta data using PARSER.
+
+PARSER must accept a string and return an alist.  The
+`peut-publier-default-meta-data-parser' is used when no PARSER is
+provided."
+  (let* ((meta-data (peut-publier-get-meta-data file))
+         (parser (or parser peut-publier-default-meta-data-parser))
+         (kv-list (funcall parser meta-data)))
+    (cdr (assoc key kv-list))))
 
 ;; todo change this from renderer-org-export to
 ;; render-org-to-html. The former gives the mechanism, the latter a

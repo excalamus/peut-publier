@@ -139,8 +139,8 @@ is 'html."
   (let* ((test-file (concat (temporary-file-directory) "test-file"))
          (result (progn
                    (with-temp-file test-file
-                     (insert peut-publier-test-post-content))
-                   (peut-publier-get-keyword-value test-file "TITLE")))
+                     (insert peut-publier-test-post))
+                   (peut-publier-get-keyword-value "TITLE" test-file)))
     (delete-file test-file)
     (should (string-equal "Test post" result)))))
 
