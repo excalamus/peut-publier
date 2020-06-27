@@ -2,7 +2,7 @@
 #+STARTUP: showall
 
 * peut-publier                                                          :TOC:
-- [[#peut-publier-enables-users-to][*P*\eut-publier *e*\nables *u*\sers *t*\o...]]
+- [[#peut-publier-enables-users-to][Peut-publier Enables Users To...]]
 - [[#background][Background]]
   - [[#recipe-for-a-simple-static-site-generator][Recipe for a simple static site generator]]
   - [[#1-renderer][1. Renderer]]
@@ -12,7 +12,7 @@
 - [[#beyond-simple][Beyond simple]]
 - [[#footnotes][Footnotes]]
 
-* *P*eut-publier *E*nables *U*sers *T*o...
+* Peut-publier Enables Users To...
 Build a website.  Use the markup language you want, according to your
 workflow.  Take control of the system and direct its behavior.  Modify
 it instead of you.
