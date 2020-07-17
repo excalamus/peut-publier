@@ -131,7 +131,22 @@ is 'html."
                  peut-publier-test-post-meta-data)))
     (should (equal '(("TITLE" . "Test post")
                      ("AUTHOR" . "Excalamus")
-                     ("TAGS" . "blogging tests"))
+                     ("TAGS" . "blogging tests")
+                     ("TYPE" . "post"))
+                   result))))
+
+(ert-deftest peut-publier-test-meta-data-alist ()
+  "Test that meta-data is correctly parsed into an alist."
+  (let* ((test-file (concat (temporary-file-directory) "test-file"))
+         (result (progn
+                   (with-temp-file test-file
+                     (insert peut-publier-test-post))
+                   (peut-publier-get-meta-data-alist test-file))))
+    (delete-file test-file)
+    (should (equal '(("TITLE" . "Test post")
+                     ("AUTHOR" . "Excalamus")
+                     ("TAGS" . "blogging tests")
+                     ("TYPE" . "post"))
                    result))))
 
 (ert-deftest peut-publier-test-get-keyword-value ()

@@ -109,18 +109,28 @@ case-sensitive!.  Values are whatever remains on that line."
       (lambda (x) (cons (org-element-property :key x)
                         (org-element-property :value x))))))
 
+(defun peut-publier-get-meta-data-alist (file &optional parser)
+  "Return FILE meta-data as alist using PARSER.
+
+The `peut-publier-default-meta-data-parser' is used no PARSER is
+provided."
+  (let ((meta-data (peut-publier-get-meta-data file))
+         (parser (or parser peut-publier-default-meta-data-parser)))
+    (funcall parser meta-data)))
+
 (defun peut-publier-get-keyword-value (key file &optional parser)
   "Get KEY value from FILE meta data using PARSER.
 
 PARSER must accept a string and return an alist.  The
 `peut-publier-default-meta-data-parser' is used when no PARSER is
 given."
-  (let* ((meta-data (peut-publier-get-meta-data file))
-         (parser (or parser peut-publier-default-meta-data-parser))
-         (kv-list (funcall parser meta-data)))
-    (cdr (assoc key kv-list))))
+  (let ((alist (peut-publier-get-meta-data-alist file parser)))
+    (alist-get key alist)))
 
-(cl-defun peut-publier-render-org-to-html (string &optional toc section-num (output-type 'css) (backend 'html))
+
+;; Render:
+
+(cl-defun peut-publier-render-org-to-html (string &optional toc section-num (output-type 'css) (backend peut-publier--default-org-backend))
   "Convert STRING from Org syntax to html.
 
 TOC and SECTION-NUM generate a table of contents and section
