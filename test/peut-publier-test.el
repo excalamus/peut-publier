@@ -149,17 +149,6 @@ is 'html."
                      ("TYPE" . "post"))
                    result))))
 
-(ert-deftest peut-publier-test-get-keyword-value ()
-  "Test that values can be extracted from meta-data via key."
-  (let* ((test-file (concat (temporary-file-directory) "test-file"))
-         (result (progn
-                   (with-temp-file test-file
-                     (insert peut-publier-test-post))
-                   (peut-publier-get-keyword-value "TITLE" test-file)))
-    (delete-file test-file)
-    (should (string-equal "Test post" result)))))
-
-
 (provide 'peut-publier-test)
 
 ;;; peut-publier-test.el ends here

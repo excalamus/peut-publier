@@ -66,11 +66,13 @@ Used with `peut-publier-render-to-html'.")
 (defvar peut-publier-default-meta-data-parser #'peut-publier-parse-org-meta-data
   "Default meta data parser.
 
-Used with `peut-publier-get-keyword-value'.")
+Used with `peut-publier-get-meta-data-alist'.")
 
 
 ;;; Functions:
 
+
+;; Meta data:
 (defun peut-publier-strip-meta-data (file &optional start end)
   "Return contents of FILE with region between START and END removed.
 
@@ -117,15 +119,6 @@ provided."
   (let ((meta-data (peut-publier-get-meta-data file))
          (parser (or parser peut-publier-default-meta-data-parser)))
     (funcall parser meta-data)))
-
-(defun peut-publier-get-keyword-value (key file &optional parser)
-  "Get KEY value from FILE meta data using PARSER.
-
-PARSER must accept a string and return an alist.  The
-`peut-publier-default-meta-data-parser' is used when no PARSER is
-given."
-  (let ((alist (peut-publier-get-meta-data-alist file parser)))
-    (alist-get key alist)))
 
 
 ;; Render:
