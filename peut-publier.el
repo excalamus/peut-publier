@@ -8,6 +8,9 @@
 
 ;;; Commentary:
 
+;; The peut-publier namespace is verbose.  For improved readability,
+;; use `nameless-mode': https://github.com/Malabarba/Nameless
+
 ;;; Code:
 
 
@@ -263,7 +266,7 @@ RARGS."
 ;; Assemble:
 
 (defun peut-publier-post-template (page-path)
-  "Render PAGE-PATH as html string."
+  "Insert PAGE-PATH into html string template."
   (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
          (body-content (peut-publier-render-to-html page-path)))
     (concat

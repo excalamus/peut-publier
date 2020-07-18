@@ -2,6 +2,9 @@
 
 ;;; Commentary:
 
+;; The peut-publier-test namespace is verbose.  For improved readability, use
+;; `nameless-mode': https://github.com/Malabarba/Nameless
+
 
 ;;; Code:
 
