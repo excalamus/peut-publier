@@ -42,6 +42,46 @@
    peut-publier-test-post-content)
   "Sample post file.")
 
+(defvar peut-publier-test-assembled-post
+  (concat "<!DOCTYPE html5>\n"
+          "<html lang=\"en\">\n"
+          "   <head>\n"
+          peut-publier-static-head
+          ;; peut-publier-variable-head
+          "      <title>Test post</title>\n"
+          ;;
+          "   </head>\n"
+          "   <body>\n"
+          peut-publier-body-preamble
+          ;; page content
+          "\n<div id=\"content\">\n"
+          "<h1>Test post</h1>\n"
+          "<div class=\"outline-2\">\n"
+          "<h2>Header</h2>\n"
+          "<div class=\"outline-text-2\">\n"
+          "</div>\n"
+          "<div class=\"outline-3\">\n"
+          "<h3>Subheader</h3>\n"
+          "<div class=\"outline-text-3\">\n"
+          "<p>\n"
+          "Hello, world!\n"
+          "</p>\n"
+          "\n"
+          "<div class=\"org-src-container\">\n"
+          "<pre class=\"src src-python\"><span class=\"org-keyword\">print</span>(<span class=\"org-string\">'Goodbye, cruel world...'</span>)\n"
+          "</pre>\n"
+          "</div>\n"
+          "</div>\n"
+          "</div>\n"
+          "</div>\n"
+          "<div class=\"post-date\">2020-07-17</div>\n"
+          "</div>\n"
+          peut-publier-body-postamble
+          ;;
+          "   </body>\n"
+          "</html>")
+  "Post after being assembled.")
+
 ;;; Tests:
 
 
@@ -167,45 +207,7 @@ is 'html."
                      (insert peut-publier-test-post))
                    (peut-publier-assemble-page test-file))))
     (delete-file test-file)
-    (should (string-equal
-             (concat "<!DOCTYPE html5>\n"
-                     "<html lang=\"en\">\n"
-                     "   <head>\n"
-                     peut-publier-static-head
-                     ;; peut-publier-variable-head
-                     "      <title>Test post</title>\n"
-                     ;;
-                     "   </head>\n"
-                     "   <body>\n"
-                     peut-publier-body-preamble
-                     ;; page content
-                     "\n<div id=\"content\">\n"
-                     "<h1>Test post</h1>\n"
-                     "<div class=\"outline-2\">\n"
-                     "<h2>Header</h2>\n"
-                     "<div class=\"outline-text-2\">\n"
-                     "</div>\n"
-                     "<div class=\"outline-3\">\n"
-                     "<h3>Subheader</h3>\n"
-                     "<div class=\"outline-text-3\">\n"
-                     "<p>\n"
-                     "Hello, world!\n"
-                     "</p>\n"
-                     "\n"
-                     "<div class=\"org-src-container\">\n"
-                     "<pre class=\"src src-python\"><span class=\"org-keyword\">print</span>(<span class=\"org-string\">'Goodbye, cruel world...'</span>)\n"
-                     "</pre>\n"
-                     "</div>\n"
-                     "</div>\n"
-                     "</div>\n"
-                     "</div>\n"
-                     "<div class=\"post-date\">2020-07-17</div>\n"
-                     "</div>\n"
-                     peut-publier-body-postamble
-                     ;;
-                     "   </body>\n"
-                     "</html>")
-             result))))
+    (should (string-equal peut-publier-test-assembled-post result))))
 
 (provide 'peut-publier-test)
 
