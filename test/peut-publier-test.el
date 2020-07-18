@@ -219,6 +219,24 @@ is 'html."
          (result (peut-publier-relative-to dir path ".html")))
     (should (string-equal "/home/foo/site/publish/test-post.html" result))))
 
+(ert-deftest peut-publier-test-publish-page ()
+  "Test that page publishes to file."
+  (let* ((filename (concat (temporary-file-directory) "test-file"))
+         (post (concat filename ".org"))
+         (published (concat filename ".html"))
+         (result (progn
+                   (with-temp-file post
+                     (insert peut-publier-test-post))
+                   (peut-publier-publish-page post (temporary-file-directory))
+                   (with-temp-buffer
+                     ;; when insert-file-contents-literally is used,
+                     ;; copyright symbol is given in UTF-8 Octal Bytes
+                     (insert-file-contents published)
+                     (buffer-string)))))
+    (delete-file post)
+    (delete-file published)
+    (should (string-equal peut-publier-test-assembled-post result))))
+
 (provide 'peut-publier-test)
 
 ;;; peut-publier-test.el ends here

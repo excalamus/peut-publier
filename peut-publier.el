@@ -107,6 +107,24 @@ The key is page type and the value the associated template.")
 
 ;; User:
 
+(defvar peut-publier-root-directory "~/site/"
+  "Top level directory of website.")
+
+(defvar peut-publier-publish-directory "~/site/publish/"
+  "Directory where converted files are published.")
+
+(defvar peut-publier-src-directory "~/site/src/"
+  "Directory where page source files are stored.")
+
+(defvar peut-publier-tld "."
+  "Top level domain name for site.")
+
+(defvar peut-publier-about-pic "static/about.jpg"
+  "About page picture.")
+
+(defvar peut-publier-about-pic-alt "Headshot"
+  "About page picture alt text.")
+
 (defvar peut-publier-static-head
   (concat "     <meta charset=\"UTF-8\">\n"
           "      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
@@ -302,7 +320,6 @@ RARGS."
                  "</html>"))
         (buffer-string)))))
 
-
 
 ;; Publish:
 
@@ -316,6 +333,20 @@ Optionally change extension to EXTENSION."
     (if extension
         (concat (file-name-sans-extension relative-path) extension)
       relative-path)))
+
+(defun peut-publier-publish-page (page-path &optional out-dir)
+  "Publish PAGE-PATH as html file in OUT-DIR.
+
+The `peut-publier-publish-directory' is used when no OUT-DIR is
+given."
+  (let ((out-dir (or out-dir peut-publier-publish-directory))
+        (out-file (peut-publier-relative-to out-dir page-path ".html")))
+    (condition-case nil
+        (progn
+          (with-temp-file out-file
+            (insert- (peut-publier-assemble-page page-path)))
+          (message "Wrote %s" out-file))
+      (error "Could not publish %s" page-path))))
 
 (provide 'peut-publier)
 
