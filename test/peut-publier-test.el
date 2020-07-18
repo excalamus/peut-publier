@@ -209,6 +209,16 @@ is 'html."
     (delete-file test-file)
     (should (string-equal peut-publier-test-assembled-post result))))
 
+
+;; Publish:
+
+(ert-deftest peut-publier-test-relative-to ()
+  "Test relative path modifications."
+  (let* ((path "/home/foo/site/src/test-post.org")
+         (dir "/home/foo/site/publish")
+         (result (peut-publier-relative-to dir path ".html")))
+    (should (string-equal "/home/foo/site/publish/test-post.html" result))))
+
 (provide 'peut-publier-test)
 
 ;;; peut-publier-test.el ends here

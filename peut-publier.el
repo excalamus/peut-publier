@@ -302,6 +302,21 @@ RARGS."
                  "</html>"))
         (buffer-string)))))
 
+
+
+;; Publish:
+
+(defun peut-publier-relative-to (dir path &optional extension)
+  "Return the PATH modified relative to DIR.
+
+Optionally change extension to EXTENSION."
+  (let ((relative-path (concat
+                        (file-name-as-directory dir)
+                        (file-name-nondirectory path))))
+    (if extension
+        (concat (file-name-sans-extension relative-path) extension)
+      relative-path)))
+
 (provide 'peut-publier)
 
 ;;; peut-publier.el ends here
