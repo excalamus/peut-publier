@@ -1,9 +1,9 @@
-;; peut-publier.el --- (P)eut-publier (E)nables (U)sers (T)o... Publish -*- lexical-binding: t; -*-
+;;; peut-publier.el --- (P)eut-publier (E)nables (U)sers (T)o... Publish -*- lexical-binding: t; -*-
 
 ;; Author: Matt Trzcinski
 ;; Version: 0.0.0
 ;; Package-Requires: ((emacs "26.3"))
-;; Keywords:  static, website, generator, blog, publish
+;; Keywords:  static, website, generator, publish, blog
 ;; URL: https://github.com/excalamus/peut-publier
 
 ;;; Commentary:
@@ -19,10 +19,10 @@
 (require 'cl-macs)  ; cl-defun
 
 
-;;; Variables
+;;; Variables:
 
 
-;;;; Internal:
+;; Internal:
 
 (defvar peut-publier--regexp-nonwhitespace "[^[:space:]]"
   "Regular expression for non-whitespace character.

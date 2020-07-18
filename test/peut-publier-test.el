@@ -42,7 +42,7 @@
 ;;; Tests:
 
 
-;;;; Renderer
+;; Render:
 
 (ert-deftest peut-publier-test-render-to-html ()
   "Test that `peut-publier-render-to-html' converts a file to
@@ -105,7 +105,7 @@ is 'html."
     (should (string-match-p (regexp-quote "</div>") result))))
 
 
-;;; Meta-data
+;; Meta data:
 
 (ert-deftest peut-publier-test-strip-meta-data ()
   "Test that meta-data is removed and the content returned."
