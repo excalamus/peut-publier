@@ -49,8 +49,103 @@ $         end of line
 See Info node `(emacs) Regexps' for more details unless noted
 otherwise.")
 
+(defun peut-publier--org-id-filter (output &rest args)
+  "Remove id tags from Org export OUTPUT string.
+
+Org runs various filters defined within a backend on export.  A
+filter requires three arguments: the code to be transformed, the
+name of the back-end, and some optional information about the
+export process.
+
+ARGS catches the unused args and prevents flycheck from
+complaining.
+
+See `peut-publier--default-org-backend' for more details."
+  (replace-regexp-in-string
+   " id=\"[[:alpha:]-]*org[[:alnum:]]\\{7\\}\""
+   ""
+   output t))
+
+(defvar peut-publier--default-org-backend
+  (org-export-create-backend
+   :name 'peut-publier
+   :parent 'html
+   :filters '((:filter-final-output . peut-publier--org-id-filter)))
+  "Default export backend to use with `peut-publier-render-org-to-html'.
+
+This is a workaround for Org idiosyncrasies.
+
+The html Org export backend assigns random id attributes to tags.
+This makes testing the output impossible.  This fix removes the
+random attributes by attaching `peut-publier--id-filter' to a
+custom backend.  It prevents
+`org-export-filter-final-output-functions' from being polluted
+and ensures `peut-publier--org-id-filter' is called only for
+peut-publier related files.  If the default Org id becomes
+testable, simply set this variable to 'html.
+
+A typical solution would implement a hook.  The use of hooks,
+however, would be redundant here.  A normal hook would require
+setting up a temporary buffer in which to insert the rendered
+text and to run the hooks.  This is precisely how the rendering
+happens.  A non-normal hook, i.e. using `run-hook-with-args', is
+basically what happens when the
+`org-export-filter-final-output-functions' are applied.
+
+See URL `https://emacs.stackexchange.com/a/52778/15177'
+See Info node `(org) Advanced Export Configuration'.")
+
+(defvar peut-publier--template-alist
+  '((post . peut-publier-post-template))
+  "Alist of publish templates.
+
+The key is page type and the value the associated template.")
+
 
-;;;; User:
+;; User:
+
+(defvar peut-publier-static-head
+  (concat "     <meta charset=\"UTF-8\">\n"
+          "      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
+          "      <meta name=\"author\" content=\"Matt Trzcinski\">\n"
+          "      <meta name=\"referrer\" content=\"no-referrer\">\n"
+          "      <link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" />\n"
+          "      <link rel='shortcut icon' type=\"image/png\" href=\"static/favicon.png\" />\n")
+  "Part of <head> which is always the same.")
+
+(defun peut-publier-variable-head (page-path)
+  "Part of <head> which varies depending on the PAGE-PATH."
+  (concat
+   "      <title>" (cdr (assoc "TITLE" (peut-publier-get-meta-data-alist page-path) 'string-equal)) "</title>\n"))
+
+(defvar peut-publier-body-preamble
+  (concat "   <div id=\"preamble\" class=\"status\">\n"
+          "      <nav>\n"
+          "         <div class=\"flexcontainer\">\n"
+          "            <div class=\"smallitem\">\n"
+          "               <ul class=\"inline-list\">\n"
+          "                  <li>Excalamus</li>\n"
+          "               </ul>\n"
+          "            </div>\n"
+          "            <div class=\"bigitem\">\n"
+          "               <ul class=\"inline-list\">\n"
+          "                  <li><a href=\".\">Home</a></li>\n"
+          "                  <li><a href=\"about.html\">About</a></li>\n"
+          "               </ul>\n"
+          "            </div>\n"
+          "         </div>\n"
+          "      </nav>\n"
+          "      <hr/>\n"
+          "   </div>")
+  "Section which appears above the content in <body>.")
+
+(defvar peut-publier-body-postamble
+  (concat "   <div id=\"postamble\" class=\"status\">\n"
+          "      <hr/>\n"
+          "      <p>Powered by <a href=\"https://github.com/excalamus/peut-publier\">peut-publier</a></p>\n"
+          "      <p>©2020 Excalamus.com</p>\n"
+          "    </div>\n")
+  "Section which appears below the content in <body>.")
 
 (defvar peut-publier-default-renderer #'peut-publier-render-org-to-html
   "Default renderer function.
@@ -135,9 +230,10 @@ source blocks for export.  Use 'css to export CSS selectors only,
 HTML, or 'nil' to export source blocks as plain text.  Default is
 'css.  See `org-html-htmlize-output-type'.
 
-BACKEND is an `org-export-as' export backend.  Default is 'html.
-While other values, such as 'latex may produce output, only html
-related backends are supported by peut-publier.
+BACKEND is an `org-export-as' export backend.  Default is
+`peut-publier--default-org-backend'.  While other values, such as
+'latex may produce output, only html related backends are
+supported by peut-publier.
 
 \(fn STRING &optional TOC SECTION-NUM OUTPUT-TYPE BACKEND)"
 ;; 'toc'and 'sec-num' do not need a default value and can be nil,
@@ -147,7 +243,7 @@ related backends are supported by peut-publier.
   (let* ((org-export-with-toc toc)
          (org-export-with-section-numbers section-num)
          (org-html-htmlize-output-type output-type)
-         (backend (or backend 'html)))
+         (backend (or backend peut-publier--default-org-backend)))
     (with-temp-buffer
       (insert string)
       (org-export-as backend nil nil t nil))))
@@ -162,6 +258,46 @@ RARGS."
   (let ((renderer (or renderer peut-publier-default-renderer))
         (content (peut-publier-strip-meta-data file)))
     (apply renderer content rargs)))
+
+
+;; Assemble:
+
+(defun peut-publier-post-template (page-path)
+  "Render PAGE-PATH as html string."
+  (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
+         (body-content (peut-publier-render-to-html page-path)))
+    (concat
+     "\n<div id=\"content\">\n"
+     "<h1>" (cdr (assoc "TITLE" meta-data 'string-equal)) "</h1>\n"
+     body-content
+     "<div class=\"post-date\">"
+     (cdr (assoc "DATE" meta-data 'string-equal))
+     "</div>\n"
+     "</div>\n")))
+
+(defun peut-publier-assemble-page (page-path)
+  "Assemble PAGE-PATH into final html string."
+  (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
+         ;; meta data values are strings; must convert type to symbol
+         (type (intern (cdr (assoc "TYPE" meta-data 'string-equal))))
+         (template (alist-get type peut-publier--template-alist))
+         (page-content (funcall template page-path)))
+    (when page-content
+      (with-temp-buffer
+        (insert (concat
+                 "<!DOCTYPE html5>\n"
+                 "<html lang=\"en\">\n"
+                 "   <head>\n"
+                 peut-publier-static-head
+                 (peut-publier-variable-head page-path)
+                 "   </head>\n"
+                 "   <body>\n"
+                 peut-publier-body-preamble
+                 page-content
+                 peut-publier-body-postamble
+                 "   </body>\n"
+                 "</html>"))
+        (buffer-string)))))
 
 (provide 'peut-publier)
 

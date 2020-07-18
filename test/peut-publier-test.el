@@ -15,7 +15,9 @@
   (concat
    "#+TITLE: Test post\n"
    "#+AUTHOR: Excalamus\n"
+   "#+DATE: 2020-07-17\n"
    "#+TAGS: blogging tests\n"
+   "#+TYPE: post\n"
    "\n")
   "Sample post meta information.")
 
@@ -131,6 +133,7 @@ is 'html."
                  peut-publier-test-post-meta-data)))
     (should (equal '(("TITLE" . "Test post")
                      ("AUTHOR" . "Excalamus")
+                     ("DATE" . "2020-07-17")
                      ("TAGS" . "blogging tests")
                      ("TYPE" . "post"))
                    result))))
@@ -145,9 +148,61 @@ is 'html."
     (delete-file test-file)
     (should (equal '(("TITLE" . "Test post")
                      ("AUTHOR" . "Excalamus")
+                     ("DATE" . "2020-07-17")
                      ("TAGS" . "blogging tests")
                      ("TYPE" . "post"))
                    result))))
+
+
+;; Assemble:
+
+(ert-deftest peut-publier-test-assemble-page ()
+  "Test that pages are properly assembled."
+  (let* ((test-file (concat (temporary-file-directory) "test-file"))
+         (result (progn
+                   (with-temp-file test-file
+                     (insert peut-publier-test-post))
+                   (peut-publier-assemble-page test-file))))
+    (delete-file test-file)
+    (should (string-equal
+             (concat "<!DOCTYPE html5>\n"
+                     "<html lang=\"en\">\n"
+                     "   <head>\n"
+                     peut-publier-static-head
+                     ;; peut-publier-variable-head
+                     "      <title>Test post</title>\n"
+                     ;;
+                     "   </head>\n"
+                     "   <body>\n"
+                     peut-publier-body-preamble
+                     ;; page content
+                     "\n<div id=\"content\">\n"
+                     "<h1>Test post</h1>\n"
+                     "<div class=\"outline-2\">\n"
+                     "<h2>Header</h2>\n"
+                     "<div class=\"outline-text-2\">\n"
+                     "</div>\n"
+                     "<div class=\"outline-3\">\n"
+                     "<h3>Subheader</h3>\n"
+                     "<div class=\"outline-text-3\">\n"
+                     "<p>\n"
+                     "Hello, world!\n"
+                     "</p>\n"
+                     "\n"
+                     "<div class=\"org-src-container\">\n"
+                     "<pre class=\"src src-python\"><span class=\"org-keyword\">print</span>(<span class=\"org-string\">'Goodbye, cruel world...'</span>)\n"
+                     "</pre>\n"
+                     "</div>\n"
+                     "</div>\n"
+                     "</div>\n"
+                     "</div>\n"
+                     "<div class=\"post-date\">2020-07-17</div>\n"
+                     "</div>\n"
+                     peut-publier-body-postamble
+                     ;;
+                     "   </body>\n"
+                     "</html>")
+             result))))
 
 (provide 'peut-publier-test)
 
