@@ -344,7 +344,7 @@ given."
     (condition-case nil
         (progn
           (with-temp-file out-file
-            (insert- (peut-publier-assemble-page page-path)))
+            (insert (peut-publier-assemble-page page-path)))
           (message "Wrote %s" out-file))
       (error "Could not publish %s" page-path))))
 
