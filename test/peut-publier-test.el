@@ -84,6 +84,18 @@
 
 ;;; Tests:
 
+(ert-deftest peut-publier-test-alist-get ()
+  "Test alist-get wrapper."
+  (let* ((alist '(("TITLE" . "Test post")
+                 ("AUTHOR" . "Excalamus")
+                 ("DATE" . "2020-07-17")
+                 ("TAGS" . "blogging tests")))
+         (result (alist-get "TAGS" alist nil t 'string-equal)))
+    ;; test that strings are used as keys
+    (should (string-equal "Test post" (peut-publier-alist-get "TITLE" alist)))
+    ;; test that default return value can be set
+    (should (eql 'post (peut-publier-alist-get "TYPE" alist 'post)))))
+
 
 ;; Render:
 

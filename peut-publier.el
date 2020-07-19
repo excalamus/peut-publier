@@ -137,7 +137,7 @@ The key is page type and the value the associated template.")
 (defun peut-publier-variable-head (page-path)
   "Part of <head> which varies depending on the PAGE-PATH."
   (concat
-   "      <title>" (cdr (assoc "TITLE" (peut-publier-get-meta-data-alist page-path) 'string-equal)) "</title>\n"))
+   "      <title>" (peut-publier-alist-get "TITLE" (peut-publier-get-meta-data-alist page-path)) "</title>\n"))
 
 (defvar peut-publier-body-preamble
   (concat "   <div id=\"preamble\" class=\"status\">\n"
@@ -186,6 +186,19 @@ Used with `peut-publier-get-meta-data-alist'.")
 
 
 ;;; Functions:
+
+(defun peut-publier-alist-get (key alist &optional default remove)
+  "Get value associated with KEY in ALIST using `string-equal'.
+
+Wrapper for `alist-get'.  See `alist-get' for explanation of
+DEFAULT and REMOVE.
+
+Meta-data is read from file and parsed into an alist with string
+keys.  Alist tooling doesn't play well with string keys.
+Converting keys to symbols also presents issues (e.g. illegal
+characters).  This function is a compromise between the two
+situation."
+  (alist-get key alist default remove 'string-equal))
 
 
 ;; Meta data:
@@ -289,19 +302,21 @@ RARGS."
          (body-content (peut-publier-render-to-html page-path)))
     (concat
      "\n<div id=\"content\">\n"
-     "<h1>" (cdr (assoc "TITLE" meta-data 'string-equal)) "</h1>\n"
+     "<h1>" (peut-publier-alist-get "TITLE" meta-data) "</h1>\n"
      body-content
      "<div class=\"post-date\">"
-     (cdr (assoc "DATE" meta-data 'string-equal))
+     (peut-publier-alist-get "DATE" meta-data)
      "</div>\n"
      "</div>\n")))
 
 (defun peut-publier-assemble-page (page-path)
   "Assemble PAGE-PATH into final html string."
   (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
-         ;; meta data values are strings; must convert type to symbol
-         (type (intern (cdr (assoc "TYPE" meta-data 'string-equal))))
-         (template (alist-get type peut-publier--template-alist))
+         (mtype (peut-publier-alist-get "TYPE" meta-data))
+         (type (cond ((stringp mtype) (intern mtype))    ; convert strings to symbols
+                     ((and (symbolp mtype) mtype) mtype) ; not nil
+                     (t 'post)))                         ; default is 'post
+         (template (peut-publier-alist-get type peut-publier--template-alist))
          (page-content (funcall template page-path)))
     (when page-content
       (with-temp-buffer
