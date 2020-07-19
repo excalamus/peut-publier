@@ -363,6 +363,31 @@ given."
           (message "Wrote %s" out-file))
       (error "Could not publish %s" page-path))))
 
+(defun peut-publier-dir-list (dir &optional include exclude)
+  "Return list of files in DIR.
+
+INCLUDE or EXCLUDE files matching regexp.  Exclude happens after
+include."
+    (mapcar (lambda (x) (concat dir x))
+            (seq-difference (directory-files dir nil include) exclude)))
+
+(defun peut-publier-publish (&optional list out-dir)
+  "Publish pages.
+
+LIST is a list of absolute paths to page sources.  If no list is
+given, all files in the `peut-publier-src-directory' will be
+used.
+
+Unless OUT-DIR, publish pages to
+`peut-publier-publish-directory'."
+  (interactive)
+  (let ((list (or list (peut-publier-dir-list peut-publier-src-directory)))
+        (out-dir (or out-dir peut-publier-publish-directory)))
+    (mapc (lambda (x)
+            (funcall  #'peut-publier-publish-page x out-dir))
+          list)
+    (message "Site rendered successfully")))
+
 (provide 'peut-publier)
 
 ;;; peut-publier.el ends here
