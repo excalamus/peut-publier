@@ -82,6 +82,7 @@
           "</html>")
   "Post after being assembled.")
 
+
 ;;; Tests:
 
 (ert-deftest peut-publier-test-alist-get ()
