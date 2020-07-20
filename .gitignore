@@ -9,4 +9,7 @@
 
 # Undo-tree save-files
 *.~undo-tree
+
+# Directories
 /scratch/
+/demo/
