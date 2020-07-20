@@ -301,7 +301,8 @@ RARGS."
 (defun peut-publier-post-template (page-path)
   "Insert PAGE-PATH into html string template."
   (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
-         (body-content (peut-publier-render-to-html page-path)))
+         (toc (peut-publier-alist-get "TOC" meta-data))
+         (body-content (peut-publier-render-to-html page-path peut-publier-default-renderer toc)))
     (concat
      "\n<div id=\"content\">\n"
      "<h1>" (peut-publier-alist-get "TITLE" meta-data) "</h1>\n"
