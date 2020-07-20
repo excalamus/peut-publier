@@ -100,7 +100,8 @@ See Info node `(org) Advanced Export Configuration'.")
 
 (defvar peut-publier--template-alist
   '((post . peut-publier-post-template)
-    (about . peut-publier-about-template))
+    (about . peut-publier-about-template)
+    (index . peut-publier-index-template))
   "Alist of publish templates.
 
 The key is page type and the value the associated template.")
@@ -323,6 +324,18 @@ RARGS."
              body-content
              "</div>\n")))
 
+(defun peut-publier-index-template (page-path)
+  "Insert PAGE-PATH into html string template."
+  (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
+         (body-content (peut-publier-render-to-html page-path)))
+    (concat
+     "<div id=\"content\">\n"
+     body-content
+     "<ul>\n"
+     (peut-publier-html-page-list peut-publier-src-directory)
+     "</ul>\n"
+     "</div>\n")))
+
 (defun peut-publier-assemble-page (page-path)
   "Assemble PAGE-PATH into final html string."
   (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
@@ -384,6 +397,19 @@ INCLUDE or EXCLUDE files matching regexp.  Exclude happens after
 include."
     (mapcar (lambda (x) (concat dir x))
             (seq-difference (directory-files dir nil include) exclude)))
+
+(defun peut-publier-html-page-list (&optional dir)
+  "Return html list of pages in DIR."
+  (let ((dir (or dir peut-publier-src-directory)))
+    (mapconcat
+     (lambda (page-path)
+       (concat
+        "   <li><p class=\"post-title\"><a href=\""
+        (peut-publier-relative-to peut-publier-tld page-path ".html") "\">"
+        (peut-publier-alist-get "TITLE" (peut-publier-get-meta-data-alist page-path))
+        "</a></p></li>\n"))
+     (peut-publier-dir-list dir "\\.org$" '("about.org" "index.org"))
+     "")))
 
 (defun peut-publier-publish (&optional list out-dir)
   "Publish pages.
