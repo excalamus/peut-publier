@@ -99,7 +99,8 @@ See URL `https://emacs.stackexchange.com/a/52778/15177'
 See Info node `(org) Advanced Export Configuration'.")
 
 (defvar peut-publier--template-alist
-  '((post . peut-publier-post-template))
+  '((post . peut-publier-post-template)
+    (about . peut-publier-about-template))
   "Alist of publish templates.
 
 The key is page type and the value the associated template.")
@@ -119,10 +120,10 @@ The key is page type and the value the associated template.")
 (defvar peut-publier-tld "."
   "Top level domain name for site.")
 
-(defvar peut-publier-about-pic "static/about.jpg"
+(defvar peut-publier-about-img "static/about.jpg"
   "About page picture.")
 
-(defvar peut-publier-about-pic-alt "Headshot"
+(defvar peut-publier-about-img-alt "Headshot"
   "About page picture alt text.")
 
 (defvar peut-publier-static-head
@@ -157,7 +158,7 @@ The key is page type and the value the associated template.")
           "         </div>\n"
           "      </nav>\n"
           "      <hr/>\n"
-          "   </div>")
+          "   </div>\n")
   "Section which appears above the content in <body>.")
 
 (defvar peut-publier-body-postamble
@@ -308,6 +309,19 @@ RARGS."
      (peut-publier-alist-get "DATE" meta-data)
      "</div>\n"
      "</div>\n")))
+
+(defun peut-publier-about-template (page-path)
+  "Insert PAGE-PATH into html string template."
+  (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
+         (body-content (peut-publier-render-to-html page-path)))
+            (concat
+             "<div id=\"content\">\n"
+             "<img id=\"img-float\" src=\""
+             peut-publier-about-img "\" alt=\""
+             peut-publier-about-img-alt "\">\n"
+             "<h1 class=\"title\">" (peut-publier-alist-get "TITLE" meta-data) "</h1>\n"
+             body-content
+             "</div>\n")))
 
 (defun peut-publier-assemble-page (page-path)
   "Assemble PAGE-PATH into final html string."
