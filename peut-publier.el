@@ -471,7 +471,7 @@ Unless OUT-DIR, publish pages to
   (concat "   <div id=\"postamble\" class=\"status\">\n"
           "      <hr/>\n"
           "      <p>Powered by <a href=\"https://github.com/excalamus/peut-publier\">peut-publier</a></p>\n"
-          "      <p>©2020 " peut-publier-site-name "</p>\n"
+          "      <p>©" (format-time-string "%Y") " " peut-publier-site-name "</p>\n"
           "    </div>\n"))
 
 (setq peut-publier-default-renderer #'peut-publier-render-org-to-html)
