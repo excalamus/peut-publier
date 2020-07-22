@@ -27,6 +27,9 @@
 
 ;;; Variables:
 
+(defvar peut-publier-lml nil
+  "Lightweight markup language.")
+
 (defvar peut-publier-root-directory nil
   "Top level directory of website.")
 
@@ -84,6 +87,9 @@ path and returns an HTML string.")
 A renderer is a function which accepts a file, returns an HTML
 string, and may accept args.")
 
+
+;;; Internal
+
 (defvar peut-publier--regexp-nonwhitespace "[^[:space:]]"
   "Regular expression for non-whitespace character.
 
@@ -140,6 +146,9 @@ See Info node `(org) Advanced Export Configuration'.")
 Key is page type (symbol) and value the associated template
 function.")
 
+(defvar peut-publier--index-exclude nil
+  "List of files to exclude from the main index.")
+
 
 ;;; Functions:
 
@@ -187,10 +196,15 @@ Optionally change extension to EXTENSION."
 (defun peut-publier-dir-list (dir &optional include exclude)
   "Return list of files in DIR.
 
-INCLUDE or EXCLUDE files matching regexp.  Exclude happens after
-include."
-    (mapcar (lambda (x) (concat dir x))
-            (seq-difference (directory-files dir nil include) exclude)))
+INCLUDE files matching regexp.  EXCLUDE names containing.
+Exclude happens after include."
+  (let ((dir-list (mapcar (lambda (x) (concat dir x))
+                          (directory-files dir nil include))))
+    (if exclude
+        (seq-remove
+         (lambda (x) (string-match-p (regexp-opt exclude) x))
+         dir-list)
+      dir-list)))
 
 (defun peut-publier-html-page-title (page-path)
   "Create HTML title for PAGE-PATH."
@@ -207,7 +221,7 @@ include."
         (peut-publier-relative-to peut-publier-tld page-path ".html") "\">"
         (peut-publier-alist-get "TITLE" (peut-publier-get-meta-data-alist page-path))
         "</a></p></li>\n"))
-     (peut-publier-dir-list dir "\\.org$" '("about.org" "index.org"))
+     (peut-publier-dir-list dir (concat "\\." peut-publier-lml "$") peut-publier--index-exclude)
      "")))
 
 
@@ -408,6 +422,8 @@ Unless OUT-DIR, publish pages to
 
 ;;; Defaults:
 
+(setq peut-publier-lml "org")
+
 (setq peut-publier-root-directory "~/site/")
 (setq peut-publier-src-directory "~/site/src/")
 (setq peut-publier-publish-directory "~/site/publish/")
@@ -470,6 +486,8 @@ Unless OUT-DIR, publish pages to
   '((post . peut-publier-post-template)
     (about . peut-publier-about-template)
     (index . peut-publier-index-template)))
+
+(setq peut-publier--index-exclude '("index" "about"))
 
 (provide 'peut-publier)
 
