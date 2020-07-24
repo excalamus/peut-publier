@@ -189,10 +189,8 @@ Wrapper for `alist-get'.  See `alist-get' for explanation of
 DEFAULT and REMOVE.
 
 Meta-data is read from file and parsed into an alist with string
-keys.  Alist tooling doesn't play well with string keys.
-Converting keys to symbols also presents issues (e.g. illegal
-characters).  This function is a compromise between the two
-situation."
+keys (rather than using symbols with spaces).  This function is
+for use with `peut-publier-get-meta-data-alist'"
   (alist-get key alist default remove 'string-equal))
 
 (defun peut-publier-relative-to (dir path &optional extension)
@@ -260,6 +258,11 @@ See `peut-publier--template-alist' for available template types."
                      ((and (symbolp type) type) (symbol-name type))           ; non-nil symbol
                      (t default))))))
 
+(defun peut-publier-read-date (prompt)
+  "Return user-supplied date after PROMPT, defaults to today."
+   (let ((org-read-date-prefer-future nil))
+     (org-read-date nil nil nil prompt)))
+
 
 ;; Meta data:
 
@@ -303,6 +306,9 @@ case-sensitive!.  Values are whatever remains on that line."
 
 (defun peut-publier-get-meta-data-alist (file &optional parser)
   "Return FILE meta-data as alist using PARSER.
+
+Keys are given as strings.  Best used with
+`peut-publier-alist-get'.
 
 The `peut-publier-default-meta-data-parser' is used no PARSER is
 provided."
@@ -468,6 +474,71 @@ Unless OUT-DIR, publish pages to
     (message "Site rendered successfully")))
 
 
+;;; Convenience:
+
+(defun peut-publier--normalize-file-name (name &optional dir extension)
+  "Return a normalized file NAME.
+
+A normalized name begins with the current date and is file system
+and URL friendly.  It is an absolute path relative to DIR or
+`peut-publier-src-directory' with EXTENSION or
+`peut-publier-lml'."
+  (let* ((dir (or dir peut-publier-src-directory))
+         (default-directory dir)  ; b/c expand-file-name
+         (extension (concat "." (or extension peut-publier-lml)))
+         (normalized
+          (concat (format-time-string "%Y-%m-%d")
+                  "-"
+                  (url-hexify-string (downcase name))
+                  extension)))
+    (convert-standard-filename
+     (expand-file-name (peut-publier-relative-to dir normalized extension) dir))))
+
+(defun peut-publier-new-page (title &optional dir date type ext)
+    "Create a new page with TITLE.
+
+New page is automatically named using TITLE in a way that should
+be friendly with the file system and web.  When used
+interactively, the new page file is opened in the current buffer.
+The user will be prompted for TITLE, DIR, DATE, and TYPE.
+
+DATE is a string.  It is prefixed to the file name and added to
+the page meta-data.  Default is the current date formatted as
+%Y-%m-%d.
+
+TYPE corresponds to a page template found in
+`peut-publier--template-alist', given as a string.  It is added
+to the page meta-data.  Default is \"post\".
+
+DIR is the save directory.  Defaults to
+`peut-publier-src-directory'.
+
+EXT is the file extension.  Default is `peut-publier-lml'."
+    (interactive
+     (let* ((title (read-from-minibuffer "Post title: "))
+            (dir (read-directory-name "Save to: "
+                                      peut-publier-src-directory))
+            (date (peut-publier-read-date "Date: "))
+            (type (completing-read "Template type: "
+                                   peut-publier--template-alist
+                                   nil
+                                   nil
+                                   (peut-publier-convert-template-type
+                                    peut-publier-default-template-type 'string))))
+       (list title dir date type)))
+    (let* ((date (or date (format-time-string "%Y-%m-%d")))
+           (type (peut-publier-convert-template-type type 'string))
+           (ext (or ext peut-publier-lml))
+           (name (peut-publier--normalize-file-name title dir ext))
+           (meta-data-fn (alist-get (peut-publier-convert-template-type peut-publier-lml 'symbol) peut-publier--make-meta-data-alist))
+           (meta-data (funcall meta-data-fn title date type)))
+      (with-temp-file name
+        (insert meta-data))
+      (when (called-interactively-p 'any)
+        (find-file name))
+      (message "Created new page %s" name)))
+
+
 ;;; Defaults:
 
 (setq peut-publier-lml "org")
@@ -540,7 +611,7 @@ Unless OUT-DIR, publish pages to
 (setq peut-publier--index-exclude '("index" "about"))
 
 (setq peut-publier--make-meta-data-alist
-      '(org . peut-publier-make-org-meta-data))
+      '((org . peut-publier-make-org-meta-data)))
 
 (provide 'peut-publier)
 
