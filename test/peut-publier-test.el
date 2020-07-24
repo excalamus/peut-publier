@@ -97,6 +97,30 @@
     ;; test that default return value can be set
     (should (eql 'post (peut-publier-alist-get "TYPE" alist 'post)))))
 
+(ert-deftest peut-publier-test-convert-template-type ()
+  "Template types are stored in an alist as symbols and in meta
+data as strings.  Test that symbols are correctly converted to
+strings."
+  ;; symbol to symbol
+  (should (eql (peut-publier-convert-template-type 'a-symbol 'symbol 'post) 'a-symbol))
+  ;; string to symbol
+  (should (eql (peut-publier-convert-template-type "a-string" 'symbol 'post) 'a-string))
+  ;; "" and anything else to default symbol
+  (should (eql (peut-publier-convert-template-type "" 'symbol 'post) 'post))
+  (should (eql (peut-publier-convert-template-type nil 'symbol 'post) 'post))
+  ;; test default
+  (should (eql (peut-publier-convert-template-type nil 'symbol) 'post))
+
+  ;; non-nil symbol to string
+  (should (string-equal (peut-publier-convert-template-type 'a-symbol 'string 'post) "a-symbol"))
+  ;; string to string
+  (should (string-equal (peut-publier-convert-template-type "a-string" 'string 'post) "a-string"))
+  ;; nil and anything else to default string
+  (should (string-equal (peut-publier-convert-template-type "" 'string "post") "post"))
+  (should (string-equal (peut-publier-convert-template-type nil 'string "post") "post"))
+  ;; test default
+  (should (string-equal (peut-publier-convert-template-type nil 'string) "post")))
+
 
 ;; Render:
 

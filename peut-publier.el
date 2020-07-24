@@ -87,6 +87,11 @@ path and returns an HTML string.")
 A renderer is a function which accepts a file, returns an HTML
 string, and may accept args.")
 
+(defvar peut-publier-default-template-type nil
+  "Default page template type.
+
+Should be a symbol. See `peut-publier--template-alist'")
+
 
 ;;; Internal
 
@@ -223,6 +228,28 @@ Exclude happens after include."
         "</a></p></li>\n"))
      (peut-publier-dir-list dir (concat "\\." peut-publier-lml "$") peut-publier--index-exclude)
      "")))
+
+(defun peut-publier-convert-template-type (type &optional kind default)
+  "Convert template TYPE to KIND.
+
+KIND is 'string or 'symbol.  Use 'string when writing meta-data.
+Use 'symbol when reading meta-data.
+
+The DEFAULT symbol is the `peut-publier-default-template-type'.
+See `peut-publier--template-alist' for available template types."
+  (let* ((kind (or kind 'symbol))
+         (default (or default
+                      (if (eql kind 'symbol)
+                          peut-publier-default-template-type
+                        (symbol-name peut-publier-default-template-type)))))
+         (cond ((eql kind 'symbol)
+                (cond ((and (stringp type) (not (string-empty-p type))) (intern type))  ; convert strings to symbols
+                      ((and (symbolp type) type) type)                                  ; keep any symbol not nil
+                      (t  default)))
+               ((eql kind 'string)
+               (cond ((and (stringp type) (not (string-empty-p type))) type)  ; keep types given as strings
+                     ((and (symbolp type) type) (symbol-name type))           ; non-nil symbol
+                     (t default))))))
 
 
 ;; Meta data:
@@ -366,9 +393,7 @@ ARGS."
   "Assemble PAGE-PATH into final HTML string."
   (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
          (mtype (peut-publier-alist-get "TYPE" meta-data))
-         (type (cond ((stringp mtype) (intern mtype))    ; convert strings to symbols
-                     ((and (symbolp mtype) mtype) mtype) ; not nil
-                     (t 'post)))                         ; default is 'post
+         (type (peut-publier-convert-template-type mtype 'symbol))
          (template (peut-publier-alist-get type peut-publier--template-alist))
          (page-content (funcall template page-path)))
     (when page-content
@@ -475,6 +500,8 @@ Unless OUT-DIR, publish pages to
           "    </div>\n"))
 
 (setq peut-publier-default-renderer #'peut-publier-render-org-to-html)
+
+(setq peut-publier-default-template-type 'post)
 
 (setq peut-publier--default-org-backend
   (org-export-create-backend
