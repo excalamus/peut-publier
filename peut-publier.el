@@ -149,10 +149,18 @@ See Info node `(org) Advanced Export Configuration'.")
   "Alist of publish templates.
 
 Key is page type (symbol) and value the associated template
-function.")
+function.  A template function takes a page source path and
+returns an HTML string.")
 
 (defvar peut-publier--index-exclude nil
   "List of files to exclude from the main index.")
+
+(defvar peut-publier--make-meta-data-alist nil
+  "Alist of meta-data header insert functions.
+
+Key is a lightweight markup language extension.  Value is a
+function which takes arbitrary arguments and returns a string to
+be used as meta data.")
 
 
 ;;; Functions:
@@ -386,6 +394,20 @@ ARGS."
      "</ul>\n"
      "</div>\n")))
 
+(defun peut-publier-make-org-meta-data (title &optional date type)
+  "Return meta-data string for use in Org style source files.
+
+Only the page TITLE is required.  The current DATE is used by
+default.  TYPE is the page template type given as a string or
+symbol.  Default is \"post\".  See
+`peut-publier--template-alist'."
+  (let ((date (or date (format-time-string "%Y-%m-%d")))
+        (type (peut-publier-convert-template-type type 'string)))
+    (concat
+     "#+TITLE: " title "\n"
+     "#+DATE: " date "\n"
+     "#+TYPE: " type "\n")))
+
 
 ;; Publish:
 
@@ -515,6 +537,9 @@ Unless OUT-DIR, publish pages to
     (index . peut-publier-index-template)))
 
 (setq peut-publier--index-exclude '("index" "about"))
+
+(setq peut-publier--make-meta-data-alist
+      '(org . peut-publier-make-org-meta-data))
 
 (provide 'peut-publier)
 
