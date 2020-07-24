@@ -90,7 +90,7 @@ string, and may accept args.")
 (defvar peut-publier-default-template-type nil
   "Default page template type.
 
-Should be a symbol.  See `peut-publier--template-alist'.")
+Should be a symbol.  See `peut-publier-template-alist'.")
 
 
 ;;; Internal
@@ -145,7 +145,7 @@ basically what happens when the
 See URL `https://emacs.stackexchange.com/a/52778/15177'
 See Info node `(org) Advanced Export Configuration'.")
 
-(defvar peut-publier--template-alist nil
+(defvar peut-publier-template-alist nil
   "Alist of publish templates.
 
 Key is page type (symbol) and value the associated template
@@ -155,7 +155,7 @@ returns an HTML string.")
 (defvar peut-publier--index-exclude nil
   "List of files to exclude from the main index.")
 
-(defvar peut-publier--make-meta-data-alist nil
+(defvar peut-publier-meta-data-maker-alist nil
   "Alist of meta-data header insert functions.
 
 Key is a lightweight markup language extension.  Value is a
@@ -243,7 +243,7 @@ meta-data.  Use 'symbol when reading meta-data.
 
 The DEFAULT symbol is the `peut-publier-default-template-type'.
 
-See `peut-publier--template-alist' for available template types."
+See `peut-publier-template-alist' for available template types."
   (let* ((kind (or kind 'symbol))
          (default (or default
                       (if (eql kind 'symbol)
@@ -407,7 +407,7 @@ ARGS."
 Only the page TITLE is required.  The current DATE is used by
 default.  TYPE is the page template type given as a string or
 symbol.  Default is \"post\".  See
-`peut-publier--template-alist'."
+`peut-publier-template-alist'."
   (let ((date (or date (format-time-string "%Y-%m-%d")))
         (type (peut-publier-convert-template-type type 'string)))
     (concat
@@ -424,7 +424,7 @@ symbol.  Default is \"post\".  See
   (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
          (mtype (peut-publier-alist-get "TYPE" meta-data))
          (type (peut-publier-convert-template-type mtype 'symbol))
-         (template (peut-publier-alist-get type peut-publier--template-alist))
+         (template (peut-publier-alist-get type peut-publier-template-alist))
          (page-content (funcall template page-path)))
     (when page-content
       (with-temp-buffer
@@ -477,7 +477,7 @@ Unless OUT-DIR, publish pages to
 
 ;;; Convenience:
 
-(defun peut-publier--normalize-file-name (name &optional dir extension)
+(defun peut-publier-normalize-file-name (name &optional dir extension)
   "Return a normalized file NAME.
 
 A normalized name begins with the current date and is file system
@@ -508,7 +508,7 @@ the page meta-data.  Default is the current date formatted as
 %Y-%m-%d.
 
 TYPE corresponds to a page template found in
-`peut-publier--template-alist', given as a string.  It is added
+`peut-publier-template-alist', given as a string.  It is added
 to the page meta-data.  Default is \"post\".
 
 DIR is the save directory.  Defaults to
@@ -521,7 +521,7 @@ EXT is the file extension.  Default is `peut-publier-lml'."
                                       peut-publier-src-directory))
             (date (peut-publier-read-date "Date: "))
             (type (completing-read "Template type: "
-                                   peut-publier--template-alist
+                                   peut-publier-template-alist
                                    nil
                                    nil
                                    (peut-publier-convert-template-type
@@ -530,8 +530,8 @@ EXT is the file extension.  Default is `peut-publier-lml'."
     (let* ((date (or date (format-time-string "%Y-%m-%d")))
            (type (peut-publier-convert-template-type type 'string))
            (ext (or ext peut-publier-lml))
-           (name (peut-publier--normalize-file-name title dir ext))
-           (meta-data-fn (alist-get (peut-publier-convert-template-type peut-publier-lml 'symbol) peut-publier--make-meta-data-alist))
+           (name (peut-publier-normalize-file-name title dir ext))
+           (meta-data-fn (alist-get (peut-publier-convert-template-type peut-publier-lml 'symbol) peut-publier-meta-data-maker-alist))
            (meta-data (funcall meta-data-fn title date type)))
       (with-temp-file name
         (insert meta-data))
@@ -605,14 +605,14 @@ EXT is the file extension.  Default is `peut-publier-lml'."
    :parent 'html
    :filters '((:filter-final-output . peut-publier--org-id-filter))))
 
-(setq peut-publier--template-alist
+(setq peut-publier-template-alist
   '((post . peut-publier-post-template)
     (about . peut-publier-about-template)
     (index . peut-publier-index-template)))
 
 (setq peut-publier--index-exclude '("index" "about"))
 
-(setq peut-publier--make-meta-data-alist
+(setq peut-publier-meta-data-maker-alist
       '((org . peut-publier-make-org-meta-data)))
 
 (provide 'peut-publier)
