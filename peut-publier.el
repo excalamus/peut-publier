@@ -90,7 +90,7 @@ string, and may accept args.")
 (defvar peut-publier-default-template-type nil
   "Default page template type.
 
-Should be a symbol. See `peut-publier--template-alist'")
+Should be a symbol.  See `peut-publier--template-alist'.")
 
 
 ;;; Internal
@@ -240,10 +240,11 @@ Exclude happens after include."
 (defun peut-publier-convert-template-type (type &optional kind default)
   "Convert template TYPE to KIND.
 
-KIND is 'string or 'symbol.  Use 'string when writing meta-data.
-Use 'symbol when reading meta-data.
+KIND is either 'string or 'symbol.  Use 'string when writing
+meta-data.  Use 'symbol when reading meta-data.
 
 The DEFAULT symbol is the `peut-publier-default-template-type'.
+
 See `peut-publier--template-alist' for available template types."
   (let* ((kind (or kind 'symbol))
          (default (or default

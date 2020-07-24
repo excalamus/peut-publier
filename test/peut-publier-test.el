@@ -99,8 +99,8 @@
 
 (ert-deftest peut-publier-test-convert-template-type ()
   "Template types are stored in an alist as symbols and in meta
-data as strings.  Test that symbols are correctly converted to
-strings."
+data as strings.  Test that types are correctly converted from
+string to symbol and vice versa."
   ;; symbol to symbol
   (should (eql (peut-publier-convert-template-type 'a-symbol 'symbol 'post) 'a-symbol))
   ;; string to symbol
