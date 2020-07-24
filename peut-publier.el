@@ -540,6 +540,79 @@ EXT is the file extension.  Default is `peut-publier-lml'."
         (forward-line (point-max)))
       (message "Created new page \"%s\": " name)))
 
+(defun peut-publier-create-new-site (dir)
+  "Create a new site in DIR."
+  (interactive
+   (let* ((dir (read-directory-name "Directory: " "~/" nil nil "site/")))
+     (list dir)))
+  (let* ((dir (or dir "~/site/"))
+         (src (concat dir "src/"))
+         (publish (concat dir "publish/"))
+         (static (concat publish "static/"))
+         (meta-data-fn (alist-get (peut-publier-convert-template-type peut-publier-lml 'symbol) peut-publier-meta-data-maker-alist))
+         (index-file (concat src "index." peut-publier-lml))
+         (about-file (concat src "about." peut-publier-lml))
+         (index-meta-data (funcall meta-data-fn "Index" nil 'index))
+         (about-meta-data (funcall meta-data-fn "About" nil 'about))
+         (delete-by-moving-to-trash t)
+         (lib-path (file-name-directory (cdr (find-function-library 'peut-publier-create-new-site))))
+         (static-resource (concat lib-path "static/"))
+         )
+
+      ;;; create structure
+    ;; cleanup static
+    (when (called-interactively-p 'any)
+      (when (file-directory-p static)
+        (when (y-or-n-p (format "DELETE directory: %s?" static))
+          (delete-directory static t t)))
+
+      ;; cleanup publish
+      (when (file-directory-p publish)
+        (when (y-or-n-p (format "DELETE directory: %s?" publish))
+          (delete-directory publish t t)))
+
+      ;; create ../publish/static
+      (when (y-or-n-p (format "Create directory: %s? " static))
+        ;; (make-directory static t)
+        (copy-directory static-resource static nil t t)
+        )
+
+      ;; cleanup src
+      (when (file-directory-p src)
+        (when (y-or-n-p (format "DELETE directory: %s?" src ))
+          (delete-directory src t t)))
+
+      ;; create src
+      (when (y-or-n-p (format "Create directory: %s? " src))
+        (make-directory src t))
+
+      ;;; create default files
+      ;; cleanup index
+      (when (file-exists-p index-file)
+        (when (y-or-n-p (format "DELETE file: %s?" index-file))
+          (delete-file index-file t)))
+      ;; create index
+      (with-temp-file index-file (insert index-meta-data))
+      (message "Created %s" index-file)
+
+      ;; cleanup about
+      (when (file-exists-p about-file)
+        (when (y-or-n-p (format "DELETE file: %s?" about-file))
+          (delete-file about-file t)))
+      ;; create about
+      (with-temp-file about-file (insert about-meta-data))
+      (message "Created %s" about-file)
+
+      ;;; create new page
+      ;; set globals so that user can publish
+      (setq peut-publier-root-directory dir)
+      (message "Set `peut-publier-root-directory' to %s" dir)
+      (setq peut-publier-src-directory src)
+      (message "Set `peut-publier-src-directory' to %s" src)
+      (setq peut-publier-publish-directory publish)
+      (message "Set `peut-publier-publish-directory' to %s" publish)
+      (call-interactively 'peut-publier-new-page))))
+
 
 ;;; Defaults:
 

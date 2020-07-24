@@ -1,0 +1,154 @@
+div.footpara::before {
+    content: " – ";
+}
+
+.footpara {
+    display: inline;
+}
+
+#archive {
+    text-align: center;
+    padding-top: 2em;
+}
+
+.post-date {
+    padding-top: 1.3em;
+}
+
+code {
+    font-family: Consolas, monaco, monospace;
+}
+
+p {
+    line-height: 1.4em;
+}
+
+sup {
+    line-height: 0em;
+}
+
+a {
+    color: blue;
+}
+
+a:visited {
+    color: purple;
+}
+
+body {
+    background: #fffceb;
+    color: #000;
+    font-family: georgia, times, "Liberation Serif", serif;
+}
+
+.taglist {
+    padding-top: 1.3em;
+}
+
+.flexcontainer {
+   display: flex;
+   flex-direction: row;
+}
+
+.bigitem {
+    text-align:right;
+   flex: 2 0 0;
+}
+.smallitem {
+   flex: 1 0 0;
+}
+
+@media screen and (max-width: 27.5em) {
+    .flexcontainer {
+	flex-direction: column;
+    }
+
+    .flexcontainer div {
+	text-align: center;
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1em auto 1em;
+}
+
+#img-float {
+    float: left;
+    margin: 0 10px 10px 0;
+    width: 150px;
+    height: 150px;
+}
+
+#content, #preamble, #postamble {
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: .5em;
+    padding-left: .5em;
+    max-width: 40em;
+}
+
+#postamble {
+    margin-top: 1em;
+    text-align: center;
+}
+
+.org-src-container, .example {
+    background-color: #f6fffe;
+    border-style: solid;
+    border-width: 5px;
+    border-radius: .25rem;
+    padding: 5px;
+    border-color: #cdecff;
+    font-family: Consolas, monaco, monospace;
+    overflow-x: auto;
+}
+
+ul.inline-list {
+    padding-left: 0;
+    padding-right: 0;
+
+}
+
+ul.inline-list, ul.inline-list li {
+    display: inline;
+}
+
+ul.inline-list li {
+    padding-right: 0.2em;
+    padding-left: 0.2em;
+}
+
+nav {
+    margin-top: .75em;
+    margin-bottom: .75em;
+
+}
+
+ul.interpunct li {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+ul.interpunct li:after {
+    content: " · ";
+    padding-right: .2em;
+    padding-left: .2em;
+}
+
+ul.interpunct li:last-child:after {
+    content: "";
+}
+
+#postamble p {
+    margin-top: .4em;
+    margin-bottom: .6em;
+}
+
+@media (orientation: landscape) {
+    #content, #preamble, #postamble {
+	max-width: 65%;
+    }
+}
