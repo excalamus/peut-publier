@@ -413,7 +413,8 @@ symbol.  Default is \"post\".  See
     (concat
      "#+TITLE: " title "\n"
      "#+DATE: " date "\n"
-     "#+TYPE: " type "\n")))
+     "#+TYPE: " type "\n"
+     "\n")))
 
 
 ;; Publish:
@@ -535,8 +536,9 @@ EXT is the file extension.  Default is `peut-publier-lml'."
       (with-temp-file name
         (insert meta-data))
       (when (called-interactively-p 'any)
-        (find-file name))
-      (message "Created new page %s" name)))
+        (find-file name)
+        (forward-line (point-max)))
+      (message "Created new page \"%s\": " name)))
 
 
 ;;; Defaults:
