@@ -212,14 +212,96 @@ the meta-data parsing.
 
 Let's delimit from the beginning of the file to the first blank line.
 
-
-
-
-
-
-
-
 ** 4. Assemble
+To assemble is to fit the content and meta data into the webpage
+structure.  The webpages must also be linked together.  It makes sense
+to dedicate one page to this purpose as a home page index.  This
+implies different page types.  So, the assembly process should
+accomodate pages used for different purposes.
+
+But what's common between types?  Let's examine the path.
+
+#+begin_example
++-------------+
+| Source file |
++-------------+
+| meta-data   |
+| content     |
++-------------+
+       |
+       |
+       V
++------------------+
+| Output file      |
++--<head>----------+
+| static-head      |
+| variable-head    |
++--<body>----------+
+| body-preamble    |
+| rendered-content |
+| body-postamble   |
++------------------+
+#+end_example
+
+The head is for meta data.  The static head has parts which never
+vary, like a style sheet reference, favicon, or charset definition.
+The variable head has elements, like the title, which change.  The
+structure of these, however, is typically consistent across pages.
+
+What differentiates a page is the body of an html document.  The
+preamble simply comes before the content.  It is the part of the body
+before the content you want to remain consistent. It's often used for
+things like menus or banners.  The postamble goes after the content,
+such as a copyright or website information.  It too is what you want
+to be constant.  It is the structure of where the content goes that
+differs.
+
+So page types are determined by the structure that holds the content.
+
+This implies the following path:
+
+#+begin_example
+    +-------------+
+    | Source file |
+    +-------------+
+    | meta-data   |
+    | content     |
+    +-------------+
+           |
+           |
+           V
+  +------------------+
+  | Type layout      |
+  +------------------+
+  | rendered content |
+  +------------------+
+           |
+           |       +------------------+
+           |       | Output file      |
+           |       +--<head>----------+
+           |       | static-head      |
+           |       | variable-head    |
+           |       +--<body>----------+
+           |       | body-preamble    |
+           +------>| rendered-content |
+                   | body-postamble   |
+                   +------------------+
+#+end_example
+
+A different type corresponds to a different structure.
+
+This is typically where templating enters the design.  I think this is
+where the flexibility of Lisp can shine: use Lisp as the templating
+language and modify the language to meet your need.  No separate
+syntax or disjointed documentation.  Just html, Lisp, and docstrings.
+
+How should page types be differentiated? One approach is through meta
+data.  Another is through file names. I don't think it matters much
+for my purposes (blog). It's probably more proper to put it in the
+meta-data.  Regardless, it should be a function which determines type.
+There will also be a map between type and structure.  It would be
+convenient to provide a default type. For a blog, this should be a
+post.
 
 * Beyond simple
 As a package, it might be nice to include some conveniences such as:
@@ -229,11 +311,14 @@ As a package, it might be nice to include some conveniences such as:
 - automated source file creation
 - all-in-one renderer and preview option
 - RSS feed
+- tag categorization
+- default type
+- before/after hooks on renderer
 
 * Footnotes
 
 [fn:1] Markdown uses three backticks (=```=); Org uses
-=#+begin/#+end=; JSON uses curly-braces, etc.
+=#+begin/#+end=; JSON uses curly-braces; etc.
 
 [fn:2] The Org mode export facility, for example, uses a
 hash-plus-colon pattern to indicate meta-data (e.g. =#+TITLE: Moby
