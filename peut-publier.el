@@ -503,8 +503,8 @@ and URL friendly.  It is an absolute path relative to DIR or
 
 New page is automatically named using TITLE in a way that should
 be friendly with the file system and web.  When used
-interactively, the new page file is opened in the current buffer.
-The user will be prompted for TITLE, DIR, DATE, and TYPE.
+interactively, the user is prompted for meta-data and the new
+page is opened as an unsaved buffer.
 
 DATE is a string.  It is prefixed to the file name and added to
 the page meta-data.  Default is the current date formatted as
@@ -520,8 +520,6 @@ DIR is the save directory.  Defaults to
 EXT is the file extension.  Default is `peut-publier-lml'."
     (interactive
      (let* ((title (read-from-minibuffer "Post title: "))
-            (dir (read-directory-name "Save to: "
-                                      peut-publier-src-directory))
             (date (peut-publier-read-date "Date: "))
             (type (completing-read "Template type: "
                                    peut-publier-template-alist
@@ -529,19 +527,25 @@ EXT is the file extension.  Default is `peut-publier-lml'."
                                    nil
                                    (peut-publier-convert-template-type
                                     peut-publier-default-template-type 'string))))
-       (list title dir date type)))
-    (let* ((date (or date (format-time-string "%Y-%m-%d")))
+       (list title nil date type)))
+    (let* ((dir (or dir peut-publier-src-directory))
+           (date (or date (format-time-string "%Y-%m-%d")))
            (type (peut-publier-convert-template-type type 'string))
            (ext (or ext peut-publier-lml))
            (name (peut-publier-normalize-file-name title dir ext))
            (meta-data-fn (alist-get (peut-publier-convert-template-type peut-publier-lml 'symbol) peut-publier-meta-data-maker-alist))
-           (meta-data (funcall meta-data-fn title date type)))
-      (with-temp-file name
-        (insert meta-data))
-      (when (called-interactively-p 'any)
-        (find-file name)
-        (forward-line (point-max)))
-      (message "Created new page \"%s\": " name)))
+           (meta-data (funcall meta-data-fn title date type))
+           (interactivep (called-interactively-p 'any)))
+      (cond ((eq interactivep t)
+             (find-file
+              (read-string "Save as: " name))
+             (insert meta-data)
+             (forward-line (point-max)))
+            (t (with-temp-file name
+                 (insert meta-data))
+               (message "Created new page \"%s\": " name)))))
+
+
 
 (defun peut-publier-create-new-site (dir)
   "Create a new site in DIR."
