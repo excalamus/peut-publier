@@ -432,7 +432,7 @@ symbol.  Default is \"post\".  See
     (when page-content
       (with-temp-buffer
         (insert (concat
-                 "<!DOCTYPE html5>\n"
+                 "<!DOCTYPE html>\n"
                  "<html lang=\"en\">\n"
                  "   <head>\n"
                  peut-publier-static-head

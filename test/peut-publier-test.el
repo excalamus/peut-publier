@@ -43,7 +43,7 @@
   "Sample post file.")
 
 (defvar peut-publier-test-assembled-post
-  (concat "<!DOCTYPE html5>\n"
+  (concat "<!DOCTYPE html>\n"
           "<html lang=\"en\">\n"
           "   <head>\n"
           peut-publier-static-head
