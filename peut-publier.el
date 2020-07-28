@@ -519,7 +519,7 @@ DIR is the save directory.  Defaults to
 
 EXT is the file extension.  Default is `peut-publier-lml'."
     (interactive
-     (let* ((title (read-from-minibuffer "Post title: "))
+     (let* ((title (read-from-minibuffer "Page title: "))
             (date (peut-publier-read-date "Date: "))
             (type (completing-read "Template type: "
                                    peut-publier-template-alist
@@ -545,8 +545,6 @@ EXT is the file extension.  Default is `peut-publier-lml'."
                  (insert meta-data))
                (message "Created new page \"%s\": " name)))))
 
-
-
 (defun peut-publier-create-new-site (dir)
   "Create a new site in DIR."
   (interactive
@@ -563,10 +561,9 @@ EXT is the file extension.  Default is `peut-publier-lml'."
          (about-meta-data (funcall meta-data-fn "About" nil 'about))
          (delete-by-moving-to-trash t)
          (lib-path (file-name-directory (cdr (find-function-library 'peut-publier-create-new-site))))
-         (static-resource (concat lib-path "static/"))
-         )
+         (static-resource (concat lib-path "static/")))
 
-      ;;; create structure
+    ;;; create structure
     ;; cleanup static
     (when (called-interactively-p 'any)
       (when (file-directory-p static)
@@ -581,8 +578,7 @@ EXT is the file extension.  Default is `peut-publier-lml'."
       ;; create ../publish/static
       (when (y-or-n-p (format "Create directory: %s? " static))
         ;; (make-directory static t)
-        (copy-directory static-resource static nil t t)
-        )
+        (copy-directory static-resource static nil t t))
 
       ;; cleanup src
       (when (file-directory-p src)
