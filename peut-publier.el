@@ -228,8 +228,11 @@ Exclude happens after include."
     (mapconcat
      (lambda (page-path)
        (concat
-        "   <li><p class=\"post-title\"><a href=\""
-        (peut-publier-relative-to peut-publier-tld page-path ".html") "\">"
+        "   <li>"
+        "<p class=\"post-title\">"
+        "<a href=\""
+        (url-hexify-string (peut-publier-relative-to peut-publier-tld page-path ".html"))
+        "\">"
         (peut-publier-alist-get "TITLE" (peut-publier-get-meta-data-alist page-path))
         "</a></p></li>\n"))
      (peut-publier-dir-list dir (concat "\\." peut-publier-lml "$") peut-publier--index-exclude)
@@ -490,7 +493,7 @@ and URL friendly.  It is an absolute path relative to DIR or
          (normalized
           (concat (format-time-string "%Y-%m-%d")
                   "-"
-                  (url-hexify-string (downcase name))
+                  (downcase name)
                   extension)))
     (convert-standard-filename
      (expand-file-name (peut-publier-relative-to dir normalized extension) dir))))
