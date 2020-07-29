@@ -451,6 +451,18 @@ symbol.  Default is \"post\".  See
 
 The `peut-publier-publish-directory' is used when no OUT-DIR is
 given."
+  (interactive
+   (let ((page-path (read-file-name
+                     "Page file: "
+                     peut-publier-src-directory
+                     nil
+                     t
+                     (file-name-nondirectory (buffer-file-name))))
+         (out-dir (read-directory-name
+                   "Publish dir: "
+                   (expand-file-name peut-publier-publish-directory)
+                   peut-publier-publish-directory)))
+     (list page-path nil)))
   (let* ((out-dir (or out-dir peut-publier-publish-directory))
          (out-file (peut-publier-relative-to out-dir page-path ".html")))
     (condition-case nil
