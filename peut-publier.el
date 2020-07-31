@@ -723,7 +723,7 @@ a new page is not created."
           "      <meta name=\"author\" content=\"" peut-publier-author "\">\n"
           "      <meta name=\"referrer\" content=\"no-referrer\">\n"
           "      <link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" />\n"
-          "      <link rel='shortcut icon' type=\"image/png\" href=\"static/favicon.png\" />\n"))
+          "      <link rel='shortcut icon' type=\"image/x-icon\" href=\"static/favicon.ico\" />\n"))
 
 (setq peut-publier-variable-head #'peut-publier-html-page-title)
 
