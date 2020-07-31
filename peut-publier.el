@@ -557,7 +557,7 @@ EXT is the file extension.  Default is `peut-publier-lml'."
                  (insert meta-data))
                (message "Created new page \"%s\": " name)))))
 
-(defun peut-publier-create-new-site (dir)
+(defun peut-publier-create-site (dir)
   "Create a new site in DIR."
   (interactive
    (let* ((dir (read-directory-name "New site: " "~/" nil nil "site/"))
@@ -578,7 +578,7 @@ EXT is the file extension.  Default is `peut-publier-lml'."
          (index-meta-data (funcall meta-data-fn "Index" nil 'index))
          (about-meta-data (funcall meta-data-fn "About" nil 'about))
          (delete-by-moving-to-trash t)
-         (lib-path (file-name-directory (cdr (find-function-library 'peut-publier-create-new-site))))
+         (lib-path (file-name-directory (cdr (find-function-library 'peut-publier-create-site))))
          (static-resource (concat lib-path "static/")))
 
     ;; runs even when dir does not exist; always returns nil
