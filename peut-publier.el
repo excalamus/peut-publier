@@ -581,6 +581,7 @@ EXT is the file extension.  Default is `peut-publier-lml'."
          (lib-path (file-name-directory (cdr (find-function-library 'peut-publier-create-new-site))))
          (static-resource (concat lib-path "static/")))
 
+    ;; runs even when dir does not exist; always returns nil
     (delete-directory dir t t)
 
     (when (and existed-p (not (file-directory-p dir)))
