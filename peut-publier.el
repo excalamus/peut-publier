@@ -603,18 +603,18 @@ EXT is the file extension.  Default is `peut-publier-lml'."
     (with-temp-file about-file (insert about-meta-data))
     (message "Created %s" about-file)
 
-    ;;; create new page
-
-    ;; set globals so that user can publish
-    (setq peut-publier-root-directory dir)
-    (message "Set `peut-publier-root-directory' to %s" dir)
-    (setq peut-publier-src-directory src)
-    (message "Set `peut-publier-src-directory' to %s" src)
-    (setq peut-publier-publish-directory publish)
-    (message "Set `peut-publier-publish-directory' to %s" publish)
-
     (when (called-interactively-p 'any)
-        (call-interactively 'peut-publier-new-page))))
+
+      ;; set globals so that user can publish immediately
+      (setq peut-publier-root-directory dir)
+      (message "Set `peut-publier-root-directory' to %s" dir)
+      (setq peut-publier-src-directory src)
+      (message "Set `peut-publier-src-directory' to %s" src)
+      (setq peut-publier-publish-directory publish)
+      (message "Set `peut-publier-publish-directory' to %s" publish)
+
+      ;; create new page
+      (call-interactively 'peut-publier-new-page))))
 
 
 ;;; Defaults:
