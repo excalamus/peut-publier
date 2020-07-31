@@ -558,11 +558,23 @@ EXT is the file extension.  Default is `peut-publier-lml'."
                (message "Created new page \"%s\": " name)))))
 
 (defun peut-publier-create-site (dir)
-  "Create a new site in DIR."
+  "Create a new site in DIR.
+
+When called interactively, the user is prompted for the root
+directory of the new site.  If the directory currently exists,
+the user is alerted and may abort, leaving the file system
+unchanged.  All files in DIR are removed otherwise.  If
+`delete-by-moving-to-trash' is non-nil, the old site is trashed
+instead of deleted.  The user is then prompted to create a new
+page according to `peut-publier-default-template-type'.  To skip
+the creation of a new page, simply cancel with \\[keyboard-quit].
+
+When called from code, DIR is trashed/deleted without prompt and
+a new page is not created."
   (interactive
    (let* ((dir (read-directory-name "New site: " "~/" nil nil "site/"))
           (delete-p (when (file-directory-p dir)
-                      (y-or-n-p (format "Site already exists! DELETE site: %s?" dir)))))
+                      (y-or-n-p (format "Site already exists! DELETE everything in: %s?" dir)))))
    (catch 'stop-creating
      (when (eq delete-p nil)
        (throw 'stop-creating (user-error "Aborted by user.  New site not created")))
