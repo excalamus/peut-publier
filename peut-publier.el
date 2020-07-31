@@ -710,7 +710,7 @@ a new page is not created."
 (setq peut-publier-author "Excalamus")
 (setq peut-publier-site-name "peut-pubier")
 (setq peut-publier-tld ".")
-(setq peut-publier-about-img "static/about.jpg")
+(setq peut-publier-about-img "static/about.png")
 (setq peut-publier-about-img-alt "Headshot")
 
 (setq peut-publier-meta-data-start "")  ; beginning of file
