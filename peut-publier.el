@@ -27,70 +27,155 @@
 
 ;;; Variables:
 
-(defvar peut-publier-lml nil
-  "Lightweight markup language.")
+(defgroup peut-publier nil
+  "Extensible static website generator."
+  :prefix "peut-publier-"
+  :group 'applications)
 
-(defvar peut-publier-root-directory nil
-  "Top level directory of website.")
+(defcustom peut-publier-lml nil
+  "Lightweight markup language."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
 
-(defvar peut-publier-src-directory nil
-  "Directory where page source files are stored.")
+(defcustom peut-publier-root-directory nil
+  "Top level directory of website."
+  :type 'directory
+  :safe 'file-directory-p
+  :group 'peut-publier)
 
-(defvar peut-publier-publish-directory nil
-  "Directory where converted files are published.")
+(defcustom peut-publier-src-directory nil
+  "Directory where page source files are stored."
+  :type 'directory
+  :safe 'file-directory-p
+  :group 'peut-publier)
 
-(defvar peut-publier-author nil
-  "Author name.")
+(defcustom peut-publier-publish-directory nil
+  "Directory where converted files are published."
+  :type 'directory
+  :safe 'file-directory-p
+  :group 'peut-publier)
 
-(defvar peut-publier-site-name nil
-  "Website name.")
+(defcustom peut-publier-author nil
+  "Author name."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
 
-(defvar peut-publier-tld nil
-  "Top level domain name for site.")
+(defcustom peut-publier-site-name nil
+  "Website name."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
 
-(defvar peut-publier-about-img nil
-  "About page picture.")
+(defcustom peut-publier-tld nil
+  "Top level domain name for site."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
 
-(defvar peut-publier-about-img-alt nil
-  "About page picture alt text.")
+(defcustom peut-publier-about-img nil
+  "Path to the \"About\" page picture.
 
-(defvar peut-publier-meta-data-start nil
-  "Start delimiter for meta data relative to beginning of file.")
+Must be given relative to `peut-publier-publish-directory'."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
 
-(defvar peut-publier-meta-data-end nil
-  "End delimiter for meta data relative to beginning of file.")
+(defcustom peut-publier-about-img-alt nil
+  "Alt text for `peut-publier-about-img'."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
 
-(defvar peut-publier-default-meta-data-parser nil
+(defcustom peut-publier-meta-data-start nil
+  "Start delimiter for meta data relative to beginning of file.
+
+Must be a regexp."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
+
+(defcustom peut-publier-meta-data-end nil
+  "End delimiter for meta data relative to beginning of file.
+
+Must be a regexp."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
+
+(defcustom peut-publier-default-meta-data-parser nil
   "Default meta data parser.
 
 A meta-data parser is a function which accepts a string and
-returns an alist.")
+returns an alist."
+  :type 'function
+  :safe 'functionp
+  :group 'peut-publier)
 
-(defvar peut-publier-static-head nil
-  "HTML in <head> which is always the same.")
+(defcustom peut-publier-static-head nil
+  "HTML in <head> which is always the same."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
 
-(defvar peut-publier-variable-head nil
+(defcustom peut-publier-variable-head nil
   "HTML in <head> which changes depending on page.
 
 The variable head is provided by a function which accepts a page
-path and returns an HTML string.")
+path and returns an HTML string."
+  :type 'function
+  :safe 'functionp
+  :group 'peut-publier)
 
-(defvar peut-publier-body-preamble nil
-  "HTML which appears above the content in <body>.")
+(defcustom peut-publier-body-preamble nil
+  "HTML which appears above the content in <body>."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
 
-(defvar peut-publier-body-postamble nil
-  "HTML which appears below the content in <body>.")
+(defcustom peut-publier-body-postamble nil
+  "HTML which appears below the content in <body>."
+  :type 'string
+  :safe 'stringp
+  :group 'peut-publier)
 
-(defvar peut-publier-default-renderer nil
+(defcustom peut-publier-default-renderer nil
   "Default renderer function.
 
 A renderer is a function which accepts a file, returns an HTML
-string, and may accept args.")
+string, and may accept args."
+  :type 'function
+  :safe 'functionp
+  :group 'peut-publier)
 
-(defvar peut-publier-default-template-type nil
+(defcustom peut-publier-default-template-type nil
   "Default page template type.
 
-Should be a symbol.  See `peut-publier-template-alist'.")
+Should be a symbol.  See `peut-publier-template-alist'."
+  :type 'symbol
+  :safe 'symbolp
+  :group 'peut-publier)
+
+(defcustom peut-publier-template-alist nil
+  "Alist of publish templates.
+
+Key is page type (symbol) and value the associated template
+function.  A template function takes a page source path and
+returns an HTML string."
+  :type 'alist
+  :safe 'listp
+  :group 'peut-publier)
+
+(defcustom peut-publier-meta-data-maker-alist nil
+  "Alist of meta-data header insert functions.
+
+Key is a lightweight markup language extension.  Value is a
+function which takes arbitrary arguments and returns a string to
+be used as meta data."
+  :type 'alist
+  :safe 'listp
+  :group 'peut-publier)
 
 
 ;;; Internal
@@ -145,22 +230,8 @@ basically what happens when the
 See URL `https://emacs.stackexchange.com/a/52778/15177'
 See Info node `(org) Advanced Export Configuration'.")
 
-(defvar peut-publier-template-alist nil
-  "Alist of publish templates.
-
-Key is page type (symbol) and value the associated template
-function.  A template function takes a page source path and
-returns an HTML string.")
-
 (defvar peut-publier--index-exclude nil
   "List of files to exclude from the main index.")
-
-(defvar peut-publier-meta-data-maker-alist nil
-  "Alist of meta-data header insert functions.
-
-Key is a lightweight markup language extension.  Value is a
-function which takes arbitrary arguments and returns a string to
-be used as meta data.")
 
 
 ;;; Functions:
