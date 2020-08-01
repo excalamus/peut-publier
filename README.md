@@ -15,7 +15,7 @@
 
 # **P**eut-publier **e**nables **u**sers **t**o...
 
-* Build a web site
+* Build a website
 * Using any [lightweight markup language](https://en.m.wikipedia.org/wiki/Lightweight_markup_language)
 * With any workflow
 
@@ -23,7 +23,7 @@
 
 # Quickstart
 
-`peut-publier` is a static web site generator for [Emacs](https://www.gnu.org/software/emacs/).  It's
+`peut-publier` is a static website generator for [Emacs](https://www.gnu.org/software/emacs/).  It's
 designed to be customized and extended using Emacs Lisp.  Websites are
 built from [lightweight markup files](https://en.m.wikipedia.org/wiki/Lightweight_markup_language).  The default site is an [Org
 mode](https://orgmode.org/) blog.
