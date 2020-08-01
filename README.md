@@ -60,7 +60,7 @@ Finally, load the `peut-publier` package into Emacs:
 ## Create a new web site
 
 Use `M-x peut-publier-create-site` to create a new web site.  The
-default site is a blog.  It has an "Index" page which will render to
+default site is a blog.  It has an "Index" page with a
 list of blog posts and an "About" page with a headshot.  Text may be
 added to each.  The default directory structure, index page, and about
 page are created automatically.  You'll be prompted for the creation
