@@ -558,7 +558,7 @@ Unless OUT-DIR, publish pages to
     (mapc (lambda (x)
             (funcall  #'peut-publier-publish-page x out-dir))
           list)
-    (message "Site rendered successfully")))
+    (message "Site published successfully")))
 
 
 ;;; Convenience:
