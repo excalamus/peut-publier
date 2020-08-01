@@ -567,7 +567,7 @@ Unless OUT-DIR, publish pages to
   "Return a normalized file NAME.
 
 A normalized name begins with the current date and is file system
-and URL friendly.  It is an absolute path relative to DIR or
+friendly.  It is an absolute path relative to DIR or
 `peut-publier-src-directory' with EXTENSION or
 `peut-publier-lml'."
   (let* ((dir (or dir peut-publier-src-directory))
