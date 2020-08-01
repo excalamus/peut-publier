@@ -628,7 +628,7 @@ EXT is the file extension.  Default is `peut-publier-lml'."
                  (insert meta-data))
                (message "Created new page \"%s\": " name)))))
 
-(defun peut-publier-create-site (dir)
+(defun peut-publier-create-site (dir &rest args)
   "Create a new site in DIR.
 
 When called interactively, the user is prompted for the root
@@ -641,16 +641,22 @@ page according to `peut-publier-default-template-type'.  To skip
 the creation of a new page, simply cancel with \\[keyboard-quit].
 
 When called from code, DIR is trashed/deleted without prompt and
-a new page is not created."
+a new page is not created.
+
+ARGS is for internal use.
+
+\(fn DIR)"
   (interactive
    (let* ((dir (read-directory-name "New site: " "~/" nil nil "site/"))
-          (delete-p (when (file-directory-p dir)
-                      (y-or-n-p (format "Site already exists! DELETE everything in: %s?" dir)))))
+          (delete-p (if (file-directory-p dir)
+                        (y-or-n-p (format "Site already exists! DELETE everything in: %s?" dir))
+                      t)))
    (catch 'stop-creating
      (when (eq delete-p nil)
        (throw 'stop-creating (user-error "Aborted by user.  New site not created")))
-     (list dir))))
+     (list dir delete-p))))
   (let* ((dir (or dir "~/site/"))
+         (delete-p (or (nth 0 args) t))
          (existed-p (file-directory-p dir))
          (src (concat dir "src/"))
          (publish (concat dir "publish/"))
@@ -664,8 +670,8 @@ a new page is not created."
          (lib-path (file-name-directory (cdr (find-function-library 'peut-publier-create-site))))
          (static-resource (concat lib-path "static/")))
 
-    ;; runs even when dir does not exist; always returns nil
-    (delete-directory dir t t)
+    (when (and existed-p delete-p)
+      (delete-directory dir t t))
 
     (when (and existed-p (not (file-directory-p dir)))
       (message "Removed %s" dir))
