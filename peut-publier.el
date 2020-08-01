@@ -553,7 +553,7 @@ used.
 Unless OUT-DIR, publish pages to
 `peut-publier-publish-directory'."
   (interactive)
-  (let ((list (or list (peut-publier-dir-list peut-publier-src-directory)))
+  (let ((list (or list (peut-publier-dir-list peut-publier-src-directory (concat "\\." peut-publier-lml "$"))))
         (out-dir (or out-dir peut-publier-publish-directory)))
     (mapc (lambda (x)
             (funcall  #'peut-publier-publish-page x out-dir))
