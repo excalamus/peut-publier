@@ -1,7 +1,7 @@
 ;;; peut-publier.el --- (P)eut-publier (E)nables (U)sers (T)o... Publish -*- lexical-binding: t; -*-
 
 ;; Author: Matt Trzcinski
-;; Version: 0.0.0
+;; Version: 1.0.0
 ;; Package-Requires: ((emacs "26.3"))
 ;; Keywords:  static, website, generator, publish, blog
 ;; URL: https://github.com/excalamus/peut-publier
