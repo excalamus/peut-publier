@@ -1,8 +1,6 @@
-# peut-publier                                                          :TOC:
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
 
-- [peut-publier                                                          :TOC:](#peut-publier----------------------------------------------------------toc)
 - [**P**eut-publier **e**nables **u**sers **t**o...](#peut-publier-enables-users-to)
 - [Quickstart](#quickstart)
     - [Install](#install)
@@ -10,14 +8,8 @@
     - [Create a new web page](#create-a-new-web-page)
     - [Publish](#publish)
     - [Customize](#customize)
-- [Background](#background)
-    - [Recipe for a simple static site generator](#recipe-for-a-simple-static-site-generator)
-    - [1. Renderer](#1-renderer)
-    - [2. File handling](#2-file-handling)
-    - [3. Meta-data](#3-meta-data)
-    - [4. Assemble](#4-assemble)
-- [Beyond simple](#beyond-simple)
-- [Footnotes](#footnotes)
+    - [Extend](#extend)
+- [Demo: Extend `peut-publier` to use Markdown](#demo-extend-peut-publier-to-use-markdown)
 
 <!-- markdown-toc end -->
 
