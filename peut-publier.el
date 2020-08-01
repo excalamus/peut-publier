@@ -757,7 +757,7 @@ ARGS is for internal use.
   (concat "   <div id=\"postamble\" class=\"status\">\n"
           "      <hr/>\n"
           "      <p>Powered by <a href=\"https://github.com/excalamus/peut-publier\">peut-publier</a></p>\n"
-          "      <p>©" (format-time-string "%Y") " " peut-publier-site-name "</p>\n"
+          "      <p>©" (format-time-string "%Y") " " peut-publier-author "</p>\n"
           "    </div>\n"))
 
 (setq peut-publier-default-renderer #'peut-publier-render-org-to-html)
