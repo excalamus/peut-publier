@@ -9,7 +9,6 @@
     - [Publish](#publish)
     - [Customize](#customize)
     - [Extend](#extend)
-- [Demo: Extend `peut-publier` to use Markdown](#demo-extend-peut-publier-to-use-markdown)
 
 <!-- markdown-toc end -->
 
@@ -20,6 +19,8 @@
 * With any workflow
 
 `peut-publier` enables you to publish.
+
+See [demo](http://excalamus.github.io)
 
 # Quickstart
 
@@ -126,16 +127,10 @@ change.  These can be placed in your `init.el`:
 
 ## Extend
 
-Read on for a demonstration of how you might modify `peut-publier` to
-use *your* workflow (and not the other way around).  Afterward, you
-should feel familiar enough with `peut-publier` as a library to extend
-its language support, page types, and features.
-
 `peut-publier` is written in, and intended to be extended with, Emacs
-Lisp.  If you're not familiar with Emacs Lisp, that's okay.  People
-who have programmed before can likely follow along without much issue.
-If you're using Emacs, use `C-h f` to see a function's documentation
-and source code; use `C-h v` for variables.
+Lisp.  If you're not familiar with Emacs Lisp, that's okay.  If you're
+using Emacs, use `C-h f` to see a function's documentation and source
+code; use `C-h v` for variables.
 
 The best resources for learning Emacs Lisp are [An Introduction to
 Programming in Emacs Lisp](https://www.gnu.org/software/emacs/manual/eintr.html) and the [GNU Emacs Lisp Reference
@@ -144,5 +139,3 @@ so, they can be viewed from within Emacs using the Info documentation
 browser.  Type `C-h i d m Emacs Lisp Intro` or `C-h i d m Elisp` (`C-h
 i` for the Info browser, `d` for the top directory, and `m` for the
 manual).
-
-# Demo: Extend `peut-publier` to use Markdown
