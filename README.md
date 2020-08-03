@@ -20,7 +20,9 @@
 
 `peut-publier` enables you to publish.
 
-See [demo](http://excalamus.github.io)
+See [demo](https://excalamus.github.io/publish/index.html)
+
+![img of demo page](./demo.png?raw=true)
 
 # Quickstart
 
