@@ -714,7 +714,7 @@ ARGS is for internal use.
 (setq peut-publier-src-directory "~/site/src/")
 (setq peut-publier-publish-directory "~/site/publish/")
 (setq peut-publier-author "Excalamus")
-(setq peut-publier-site-name "peut-pubier")
+(setq peut-publier-site-name "peut-publier")
 (setq peut-publier-tld ".")
 (setq peut-publier-about-img "static/about.png")
 (setq peut-publier-about-img-alt "Headshot")

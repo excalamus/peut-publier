@@ -45,7 +45,7 @@ Install `peut-publier` by doing one of the following:
   ```
 
 Next, add `peut-publier` to your Emacs [load-path](https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Search.html).  Place the
-following in your `init.el` or evaluate ueing `M-x eval-expression`:
+following in your `init.el` or evaluate using `M-x eval-expression`:
 
 ```emacs-lisp
 ;; add the peut-publier repository to the load-path
@@ -122,7 +122,7 @@ change.  These can be placed in your `init.el`:
 
 ```emacs-lisp
 (setq peut-publier-author "Excalamus")
-(setq peut-publier-site-name "peut-pubier")
+(setq peut-publier-site-name "peut-publier")
 ```
 
 ## Extend
