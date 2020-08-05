@@ -1,5 +1,5 @@
 html {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 body {
@@ -14,11 +14,15 @@ p {
 }
 
 a {
-    color: #111;
+    color: #0077aa;
+}
+
+blockquote {
+    font-style: italic;
 }
 
 a:visited {
-    color: #454545;
+    color: #0077;
 }
 
 /* verbatim */
@@ -40,6 +44,10 @@ pre {
 .post-date {
     padding-top: 1.3rem;
     text-align: right;
+}
+
+ul {
+    list-style-type: square;
 }
 
 ul.inline-list, ul.inline-list li {
@@ -92,8 +100,6 @@ img {
 #img-float {
     float: left;
     margin: 10px 10px 0 0;
-    width: 175px;
-    height: 175px;
 }
 
 #content, #preamble, #postamble {
@@ -180,4 +186,15 @@ img {
 
 div.org-center p{
     text-align: center;
+}
+
+table, tr {
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+
+    text-align: left;
+    width: 100%;
+    margin-bottom: 1.5rem;
 }
