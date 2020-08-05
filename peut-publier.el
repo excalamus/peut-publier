@@ -68,8 +68,8 @@
   :safe 'stringp
   :group 'peut-publier)
 
-(defcustom peut-publier-tld nil
-  "Top level domain name for site."
+(defcustom peut-publier-base-url nil
+  "Base url for relative pathing."
   :type 'string
   :safe 'stringp
   :group 'peut-publier)
@@ -268,11 +268,12 @@ for use with `peut-publier-get-meta-data-alist'"
   "Return the PATH modified relative to DIR.
 
 Optionally change extension to EXTENSION."
-  (let ((relative-path (concat
-                        (file-name-as-directory dir)
-                        (file-name-nondirectory path))))
+  (let ((relative-path (if (string-empty-p dir)
+			   (file-name-nondirectory path)
+			 (concat (file-name-as-directory dir)
+				 (file-name-nondirectory path)))))
     (if extension
-        (concat (file-name-sans-extension relative-path) extension)
+	(concat (file-name-sans-extension relative-path) extension)
       relative-path)))
 
 (defun peut-publier-dir-list (dir &optional include exclude)
@@ -299,13 +300,13 @@ Exclude happens after include."
     (mapconcat
      (lambda (page-path)
        (concat
-        "   <li>"
-        "<p class=\"post-title\">"
-        "<a href=\""
-        (url-hexify-string (peut-publier-relative-to peut-publier-tld page-path ".html"))
-        "\">"
-        (peut-publier-alist-get "TITLE" (peut-publier-get-meta-data-alist page-path))
-        "</a></p></li>\n"))
+	"   <li>"
+	"<p class=\"post-title\">"
+	"<a href=\""
+	(url-hexify-string (peut-publier-relative-to peut-publier-base-url page-path ".html"))
+	"\">"
+	(peut-publier-alist-get "TITLE" (peut-publier-get-meta-data-alist page-path))
+	"</a></p></li>\n"))
      (peut-publier-dir-list dir (concat "\\." peut-publier-lml "$") peut-publier--index-exclude)
      "")))
 
@@ -715,7 +716,7 @@ ARGS is for internal use.
 (setq peut-publier-publish-directory "~/site/publish/")
 (setq peut-publier-author "Excalamus")
 (setq peut-publier-site-name "peut-publier")
-(setq peut-publier-tld ".")
+(setq peut-publier-base-url "")
 (setq peut-publier-about-img "static/about.png")
 (setq peut-publier-about-img-alt "Headshot")
 
