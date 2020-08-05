@@ -282,11 +282,11 @@ Optionally change extension to EXTENSION."
 INCLUDE files matching regexp.  EXCLUDE names containing.
 Exclude happens after include."
   (let ((dir-list (mapcar (lambda (x) (concat dir x))
-                          (directory-files dir nil include))))
+			  (directory-files dir nil include))))
     (if exclude
-        (seq-remove
-         (lambda (x) (string-match-p (regexp-opt exclude) x))
-         dir-list)
+	(seq-remove
+	 (lambda (x) (string-match-p (regexp-opt exclude) x))
+	 dir-list)
       dir-list)))
 
 (defun peut-publier-html-page-title (page-path)
@@ -320,18 +320,18 @@ The DEFAULT symbol is the `peut-publier-default-template-type'.
 
 See `peut-publier-template-alist' for available template types."
   (let* ((kind (or kind 'symbol))
-         (default (or default
-                      (if (eql kind 'symbol)
-                          peut-publier-default-template-type
-                        (symbol-name peut-publier-default-template-type)))))
-         (cond ((eql kind 'symbol)
-                (cond ((and (stringp type) (not (string-empty-p type))) (intern type))  ; convert strings to symbols
-                      ((and (symbolp type) type) type)                                  ; keep any symbol not nil
-                      (t  default)))
-               ((eql kind 'string)
-               (cond ((and (stringp type) (not (string-empty-p type))) type)  ; keep types given as strings
-                     ((and (symbolp type) type) (symbol-name type))           ; non-nil symbol
-                     (t default))))))
+	 (default (or default
+		      (if (eql kind 'symbol)
+			  peut-publier-default-template-type
+			(symbol-name peut-publier-default-template-type)))))
+	 (cond ((eql kind 'symbol)
+		(cond ((and (stringp type) (not (string-empty-p type))) (intern type))  ; convert strings to symbols
+		      ((and (symbolp type) type) type)                                  ; keep any symbol not nil
+		      (t  default)))
+	       ((eql kind 'string)
+	       (cond ((and (stringp type) (not (string-empty-p type))) type)  ; keep types given as strings
+		     ((and (symbolp type) type) (symbol-name type))           ; non-nil symbol
+		     (t default))))))
 
 (defun peut-publier-read-date (prompt)
   "Return user-supplied date after PROMPT, defaults to today."
@@ -351,7 +351,7 @@ END correspond to `peut-publier-meta-data-start' and
     (insert-file-contents-literally file)
     (goto-char (point-min))
     (let* ((start (or start (search-forward-regexp peut-publier-meta-data-start)))
-           (end (or end (search-forward-regexp peut-publier-meta-data-end))))
+	   (end (or end (search-forward-regexp peut-publier-meta-data-end))))
       (delete-region start end)
       (buffer-string))))
 
@@ -364,7 +364,7 @@ Default START and END correspond to
     (insert-file-contents-literally file)
     (goto-char (point-min))
     (let* ((start (or start (search-forward-regexp peut-publier-meta-data-start)))
-           (end (or end (search-forward-regexp peut-publier-meta-data-end))))
+	   (end (or end (search-forward-regexp peut-publier-meta-data-end))))
       (buffer-substring-no-properties start end))))
 
 (defun peut-publier-parse-org-meta-data (data)
@@ -377,7 +377,7 @@ case-sensitive!.  Values are whatever remains on that line."
     (insert data)
     (org-element-map (org-element-parse-buffer 'element) 'keyword
       (lambda (x) (cons (org-element-property :key x)
-                        (org-element-property :value x))))))
+			(org-element-property :value x))))))
 
 (defun peut-publier-get-meta-data-alist (file &optional parser)
   "Return FILE meta-data as alist using PARSER.
@@ -388,7 +388,7 @@ Keys are given as strings.  Best used with
 The `peut-publier-default-meta-data-parser' is used no PARSER is
 provided."
   (let ((meta-data (peut-publier-get-meta-data file))
-         (parser (or parser peut-publier-default-meta-data-parser)))
+	 (parser (or parser peut-publier-default-meta-data-parser)))
     (funcall parser meta-data)))
 
 
@@ -417,9 +417,9 @@ supported by peut-publier.
 ;; defaults and cannot be nil. See
 ;; https://emacs.stackexchange.com/questions/55684/
   (let* ((org-export-with-toc toc)
-         (org-export-with-section-numbers section-num)
-         (org-html-htmlize-output-type output-type)
-         (backend (or backend peut-publier--default-org-backend)))
+	 (org-export-with-section-numbers section-num)
+	 (org-html-htmlize-output-type output-type)
+	 (backend (or backend peut-publier--default-org-backend)))
     (with-temp-buffer
       (insert string)
       (org-export-as backend nil nil t nil))))
@@ -432,7 +432,7 @@ user may provide their own RENDERER.  A RENDERER is a function
 which accepts a file, returns an HTML string, and may accept
 ARGS."
   (let ((renderer (or renderer peut-publier-default-renderer))
-        (content (peut-publier-strip-meta-data file)))
+	(content (peut-publier-strip-meta-data file)))
     (apply renderer content args)))
 
 
@@ -441,8 +441,8 @@ ARGS."
 (defun peut-publier-post-template (page-path)
   "Insert PAGE-PATH into HTML string template."
   (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
-         (toc (peut-publier-alist-get "TOC" meta-data))
-         (body-content (peut-publier-render-to-html page-path peut-publier-default-renderer toc)))
+	 (toc (peut-publier-alist-get "TOC" meta-data))
+	 (body-content (peut-publier-render-to-html page-path peut-publier-default-renderer toc)))
     (concat
      "\n<div id=\"content\">\n"
      "<h1>" (peut-publier-alist-get "TITLE" meta-data) "</h1>\n"
@@ -455,15 +455,15 @@ ARGS."
 (defun peut-publier-about-template (page-path)
   "Insert PAGE-PATH into HTML string template."
   (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
-         (body-content (peut-publier-render-to-html page-path)))
-            (concat
-             "<div id=\"content\">\n"
-             "<img id=\"img-float\" src=\""
-             peut-publier-about-img "\" alt=\""
-             peut-publier-about-img-alt "\">\n"
-             "<h1 class=\"title\">" (peut-publier-alist-get "TITLE" meta-data) "</h1>\n"
-             body-content
-             "</div>\n")))
+	 (body-content (peut-publier-render-to-html page-path)))
+	    (concat
+	     "<div id=\"content\">\n"
+	     "<img id=\"img-float\" src=\""
+	     peut-publier-about-img "\" alt=\""
+	     peut-publier-about-img-alt "\">\n"
+	     "<h1 class=\"title\">" (peut-publier-alist-get "TITLE" meta-data) "</h1>\n"
+	     body-content
+	     "</div>\n")))
 
 (defun peut-publier-index-template (page-path)
   "Insert PAGE-PATH into HTML string template."
@@ -484,7 +484,7 @@ default.  TYPE is the page template type given as a string or
 symbol.  Default is \"post\".  See
 `peut-publier-template-alist'."
   (let ((date (or date (format-time-string "%Y-%m-%d")))
-        (type (peut-publier-convert-template-type type 'string)))
+	(type (peut-publier-convert-template-type type 'string)))
     (concat
      "#+TITLE: " title "\n"
      "#+DATE: " date "\n"
@@ -497,26 +497,26 @@ symbol.  Default is \"post\".  See
 (defun peut-publier-assemble-page (page-path)
   "Assemble PAGE-PATH into final HTML string."
   (let* ((meta-data (peut-publier-get-meta-data-alist page-path))
-         (mtype (peut-publier-alist-get "TYPE" meta-data))
-         (type (peut-publier-convert-template-type mtype 'symbol))
-         (template (peut-publier-alist-get type peut-publier-template-alist))
-         (page-content (funcall template page-path)))
+	 (mtype (peut-publier-alist-get "TYPE" meta-data))
+	 (type (peut-publier-convert-template-type mtype 'symbol))
+	 (template (peut-publier-alist-get type peut-publier-template-alist))
+	 (page-content (funcall template page-path)))
     (when page-content
       (with-temp-buffer
-        (insert (concat
-                 "<!DOCTYPE html>\n"
-                 "<html lang=\"en\">\n"
-                 "   <head>\n"
-                 peut-publier-static-head
-                 (funcall peut-publier-variable-head page-path)
-                 "   </head>\n"
-                 "   <body>\n"
-                 peut-publier-body-preamble
-                 page-content
-                 peut-publier-body-postamble
-                 "   </body>\n"
-                 "</html>"))
-        (buffer-string)))))
+	(insert (concat
+		 "<!DOCTYPE html>\n"
+		 "<html lang=\"en\">\n"
+		 "   <head>\n"
+		 peut-publier-static-head
+		 (funcall peut-publier-variable-head page-path)
+		 "   </head>\n"
+		 "   <body>\n"
+		 peut-publier-body-preamble
+		 page-content
+		 peut-publier-body-postamble
+		 "   </body>\n"
+		 "</html>"))
+	(buffer-string)))))
 
 (defun peut-publier-publish-page (page-path &optional out-dir)
   "Publish PAGE-PATH as HTML file in OUT-DIR.
@@ -525,23 +525,23 @@ The `peut-publier-publish-directory' is used when no OUT-DIR is
 given."
   (interactive
    (let ((page-path (read-file-name
-                     "Page file: "
-                     peut-publier-src-directory
-                     nil
-                     t
-                     (file-name-nondirectory (buffer-file-name))))
-         (out-dir (read-directory-name
-                   "Publish dir: "
-                   (expand-file-name peut-publier-publish-directory)
-                   peut-publier-publish-directory)))
+		     "Page file: "
+		     peut-publier-src-directory
+		     nil
+		     t
+		     (file-name-nondirectory (buffer-file-name))))
+	 (out-dir (read-directory-name
+		   "Publish dir: "
+		   (expand-file-name peut-publier-publish-directory)
+		   peut-publier-publish-directory)))
      (list page-path nil)))
   (let* ((out-dir (or out-dir peut-publier-publish-directory))
-         (out-file (peut-publier-relative-to out-dir page-path ".html")))
+	 (out-file (peut-publier-relative-to out-dir page-path ".html")))
     (condition-case nil
-        (progn
-          (with-temp-file out-file
-            (insert (peut-publier-assemble-page page-path)))
-          (message "Wrote %s" out-file))
+	(progn
+	  (with-temp-file out-file
+	    (insert (peut-publier-assemble-page page-path)))
+	  (message "Wrote %s" out-file))
       (error "Could not publish %s" page-path))))
 
 (defun peut-publier-publish (&optional list out-dir)
@@ -555,10 +555,10 @@ Unless OUT-DIR, publish pages to
 `peut-publier-publish-directory'."
   (interactive)
   (let ((list (or list (peut-publier-dir-list peut-publier-src-directory (concat "\\." peut-publier-lml "$"))))
-        (out-dir (or out-dir peut-publier-publish-directory)))
+	(out-dir (or out-dir peut-publier-publish-directory)))
     (mapc (lambda (x)
-            (funcall  #'peut-publier-publish-page x out-dir))
-          list)
+	    (funcall  #'peut-publier-publish-page x out-dir))
+	  list)
     (message "Site published successfully")))
 
 
@@ -572,13 +572,13 @@ friendly.  It is an absolute path relative to DIR or
 `peut-publier-src-directory' with EXTENSION or
 `peut-publier-lml'."
   (let* ((dir (or dir peut-publier-src-directory))
-         (default-directory dir)  ; b/c expand-file-name
-         (extension (concat "." (or extension peut-publier-lml)))
-         (normalized
-          (concat (format-time-string "%Y-%m-%d")
-                  "-"
-                  (downcase name)
-                  extension)))
+	 (default-directory dir)  ; b/c expand-file-name
+	 (extension (concat "." (or extension peut-publier-lml)))
+	 (normalized
+	  (concat (format-time-string "%Y-%m-%d")
+		  "-"
+		  (downcase name)
+		  extension)))
     (convert-standard-filename
      (expand-file-name (peut-publier-relative-to dir normalized extension) dir))))
 
@@ -604,30 +604,30 @@ DIR is the save directory.  Defaults to
 EXT is the file extension.  Default is `peut-publier-lml'."
     (interactive
      (let* ((title (read-from-minibuffer "Page title: "))
-            (date (peut-publier-read-date "Date: "))
-            (type (completing-read "Template type: "
-                                   peut-publier-template-alist
-                                   nil
-                                   nil
-                                   (peut-publier-convert-template-type
-                                    peut-publier-default-template-type 'string))))
+	    (date (peut-publier-read-date "Date: "))
+	    (type (completing-read "Template type: "
+				   peut-publier-template-alist
+				   nil
+				   nil
+				   (peut-publier-convert-template-type
+				    peut-publier-default-template-type 'string))))
        (list title nil date type)))
     (let* ((dir (or dir peut-publier-src-directory))
-           (date (or date (format-time-string "%Y-%m-%d")))
-           (type (peut-publier-convert-template-type type 'string))
-           (ext (or ext peut-publier-lml))
-           (name (peut-publier-normalize-file-name title dir ext))
-           (meta-data-fn (alist-get (peut-publier-convert-template-type peut-publier-lml 'symbol) peut-publier-meta-data-maker-alist))
-           (meta-data (funcall meta-data-fn title date type))
-           (interactivep (called-interactively-p 'any)))
+	   (date (or date (format-time-string "%Y-%m-%d")))
+	   (type (peut-publier-convert-template-type type 'string))
+	   (ext (or ext peut-publier-lml))
+	   (name (peut-publier-normalize-file-name title dir ext))
+	   (meta-data-fn (alist-get (peut-publier-convert-template-type peut-publier-lml 'symbol) peut-publier-meta-data-maker-alist))
+	   (meta-data (funcall meta-data-fn title date type))
+	   (interactivep (called-interactively-p 'any)))
       (cond ((eq interactivep t)
-             (find-file
-              (read-string "Save as: " name))
-             (insert meta-data)
-             (forward-line (point-max)))
-            (t (with-temp-file name
-                 (insert meta-data))
-               (message "Created new page \"%s\": " name)))))
+	     (find-file
+	      (read-string "Save as: " name))
+	     (insert meta-data)
+	     (forward-line (point-max)))
+	    (t (with-temp-file name
+		 (insert meta-data))
+	       (message "Created new page \"%s\": " name)))))
 
 (defun peut-publier-create-site (dir &rest args)
   "Create a new site in DIR.
@@ -649,27 +649,27 @@ ARGS is for internal use.
 \(fn DIR)"
   (interactive
    (let* ((dir (read-directory-name "New site: " "~/" nil nil "site/"))
-          (delete-p (if (file-directory-p dir)
-                        (y-or-n-p (format "Site already exists! DELETE everything in: %s?" dir))
-                      t)))
+	  (delete-p (if (file-directory-p dir)
+			(y-or-n-p (format "Site already exists! DELETE everything in: %s?" dir))
+		      t)))
    (catch 'stop-creating
      (when (eq delete-p nil)
        (throw 'stop-creating (user-error "Aborted by user.  New site not created")))
      (list dir delete-p))))
   (let* ((dir (or dir "~/site/"))
-         (delete-p (or (nth 0 args) t))
-         (existed-p (file-directory-p dir))
-         (src (concat dir "src/"))
-         (publish (concat dir "publish/"))
-         (publish-static (concat publish "static/"))
-         (meta-data-fn (alist-get (peut-publier-convert-template-type peut-publier-lml 'symbol) peut-publier-meta-data-maker-alist))
-         (index-file (concat src "index." peut-publier-lml))
-         (about-file (concat src "about." peut-publier-lml))
-         (index-meta-data (funcall meta-data-fn "Index" nil 'index))
-         (about-meta-data (funcall meta-data-fn "About" nil 'about))
-         (delete-by-moving-to-trash t)
-         (lib-path (file-name-directory (cdr (find-function-library 'peut-publier-create-site))))
-         (static-resource (concat lib-path "static/")))
+	 (delete-p (or (nth 0 args) t))
+	 (existed-p (file-directory-p dir))
+	 (src (concat dir "src/"))
+	 (publish (concat dir "publish/"))
+	 (publish-static (concat publish "static/"))
+	 (meta-data-fn (alist-get (peut-publier-convert-template-type peut-publier-lml 'symbol) peut-publier-meta-data-maker-alist))
+	 (index-file (concat src "index." peut-publier-lml))
+	 (about-file (concat src "about." peut-publier-lml))
+	 (index-meta-data (funcall meta-data-fn "Index" nil 'index))
+	 (about-meta-data (funcall meta-data-fn "About" nil 'about))
+	 (delete-by-moving-to-trash t)
+	 (lib-path (file-name-directory (cdr (find-function-library 'peut-publier-create-site))))
+	 (static-resource (concat lib-path "static/")))
 
     (when (and existed-p delete-p)
       (delete-directory dir t t))
@@ -726,11 +726,11 @@ ARGS is for internal use.
 
 (setq peut-publier-static-head
   (concat "     <meta charset=\"UTF-8\">\n"
-          "      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
-          "      <meta name=\"author\" content=\"" peut-publier-author "\">\n"
-          "      <meta name=\"referrer\" content=\"no-referrer\">\n"
-          "      <link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" />\n"
-          "      <link rel='shortcut icon' type=\"image/x-icon\" href=\"static/favicon.ico\" />\n"))
+	  "      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
+	  "      <meta name=\"author\" content=\"" peut-publier-author "\">\n"
+	  "      <meta name=\"referrer\" content=\"no-referrer\">\n"
+	  "      <link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" />\n"
+	  "      <link rel='shortcut icon' type=\"image/x-icon\" href=\"static/favicon.ico\" />\n"))
 
 (setq peut-publier-variable-head #'peut-publier-html-page-title)
 
@@ -756,10 +756,10 @@ ARGS is for internal use.
 
 (setq peut-publier-body-postamble
   (concat "   <div id=\"postamble\" class=\"status\">\n"
-          "      <hr/>\n"
-          "      <p>Powered by <a href=\"https://github.com/excalamus/peut-publier\">peut-publier</a></p>\n"
-          "      <p>©" (format-time-string "%Y") " " peut-publier-author "</p>\n"
-          "    </div>\n"))
+	  "      <hr/>\n"
+	  "      <p>Powered by <a href=\"https://github.com/excalamus/peut-publier\">peut-publier</a></p>\n"
+	  "      <p>©" (format-time-string "%Y") " " peut-publier-author "</p>\n"
+	  "    </div>\n"))
 
 (setq peut-publier-default-renderer #'peut-publier-render-org-to-html)
 
