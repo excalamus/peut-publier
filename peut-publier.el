@@ -644,9 +644,8 @@ the creation of a new page, simply cancel with \\[keyboard-quit].
 When called from code, DIR is trashed/deleted without prompt and
 a new page is not created.
 
-ARGS is for internal use.
-
 \(fn DIR)"
+  ;; ARGS with interactive call to pass delete-p
   (interactive
    (let* ((dir (read-directory-name "New site: " "~/" nil nil "site/"))
 	  (delete-p (if (file-directory-p dir)
@@ -655,7 +654,7 @@ ARGS is for internal use.
    (catch 'stop-creating
      (when (eq delete-p nil)
        (throw 'stop-creating (user-error "Aborted by user.  New site not created")))
-     (list dir delete-p))))
+     (list dir delete-p))))  ; delete-p passed into function by interactive through ARGS
   (let* ((dir (or dir "~/site/"))
 	 (delete-p (or (nth 0 args) t))
 	 (existed-p (file-directory-p dir))
