@@ -572,15 +572,17 @@ friendly.  It is an absolute path relative to DIR or
 `peut-publier-src-directory' with EXTENSION or
 `peut-publier-lml'."
   (let* ((dir (or dir peut-publier-src-directory))
-	 (default-directory dir)  ; b/c expand-file-name
-	 (extension (concat "." (or extension peut-publier-lml)))
-	 (normalized
-	  (concat (format-time-string "%Y-%m-%d")
-		  "-"
-		  (downcase name)
-		  extension)))
+         (default-directory dir)  ; b/c expand-file-name
+         (extension (concat "." (or extension peut-publier-lml)))
+         (normalized
+          (concat (format-time-string "%Y-%m-%d")
+                  "-"
+                  (downcase name)
+                  extension)))
     (convert-standard-filename
-     (expand-file-name (peut-publier-relative-to dir normalized extension) dir))))
+     (replace-regexp-in-string
+      " " "_"
+      (expand-file-name (peut-publier-relative-to dir normalized extension) dir)))))
 
 (defun peut-publier-new-page (title &optional dir date type ext)
     "Create a new page with TITLE.
