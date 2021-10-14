@@ -116,26 +116,93 @@ separated from content by a single blank line.
 ## Publish
 
 Publish your entire site with `M-x peut-publier-publish`.  All the
-pages in `src/` will be converted to HTML and placed in `publish/`.
-Direct your web server to `publish/` and you've entered the world of
-self-publishing.  Tu peut publier!
+source pages in the `peut-publier-src-directory` will be converted to
+HTML and placed in the `peut-publier-publish-directory`.  Direct your
+web server to the `peut-publier-publish-directory` and you've entered
+the world of self-publishing.  Tu peut publier!
 
 To publish a single page, use `M-x peut-publier-publish-page` and
 follow the prompts.
+
+A trick for those on unix-like systems is to store page source files
+in a separate directory (e.g. `draft/`) and create symlinks to files
+you want published in the `peut-publier-src-directory`. The default
+renderer will follow symlinks when publishing. To prevent rendering of
+a page, simply remove the link.
 
 ## Customize
 
 `peut-publier` allows you to customize your site through numerous
 variables.  For a complete list with descriptions, check `M-x
-customize-group peut-publier` or do it the old fashioned way with`C-h
-peut-publier- <TAB>`.
+customize-group peut-publier` or do it the old fashioned way with`C-v
+peut-publier- <TAB>` or `C-f peut-publier- <TAB>`.
 
-The following are probably the variables you'd most likely want to
-change.  These can be placed in your `init.el`:
+Customizations can be placed in a `config.el` at the top-level (or
+anywhere you like).
+
+A config may look like:
 
 ```emacs-lisp
-(setq peut-publier-author "Excalamus")
 (setq peut-publier-site-name "peut-publier")
+(setq peut-publier-author "Excalamus")
+
+;; don't use default ~/site for root
+(setq peut-publier-root-directory "/home/excalamus/Projects/peut-publier.com/"))
+
+;; since the root was redefined, redefine the source and publish
+;; directories relative to the new root
+(setq peut-publier-src-directory
+      (concat peut-publier-root-directory "src/"))
+(setq peut-publier-publish-directory
+      (concat peut-publier-root-directory "publish/"))
+
+;; define headshot image
+(setq peut-publier-about-img "static/about.png")
+(setq peut-publier-about-img-alt "Headshot")
+
+;; hack together a menu
+(setq peut-publier-body-preamble
+  (concat
+   "   <div id=\"preamble\" class=\"status\">\n"
+   "      <nav>\n"
+   "         <div class=\"flexcontainer\">\n"
+   "            <div class=\"smallitem\">\n"
+   "               <ul class=\"inline-list\">\n"
+   "                  <li><a href=\".\" id=\"website\">" peut-publier-site-name "</a></li>\n"
+   "               </ul>\n"
+   "            </div>\n"
+   "            <div class=\"bigitem\">\n"
+   "               <ul class=\"inline-list\">\n"
+   "                  <li><a href=\"about.html\">About</a></li>\n"
+   "               </ul>\n"
+   "            </div>\n"
+   "         </div>\n"
+   "      </nav>\n"
+   "      <hr/>\n"
+   "   </div>\n"))
+
+;; get webpage title from post title
+(defun my-html-page-title (page-path)
+  "Create HTML title for PAGE-PATH."
+  (concat
+   "      <title>" (peut-publier-alist-get "TITLE" (peut-publier-get-meta-data-alist page-path)) "</title>\n"))
+
+;; use my-html-page-title to render the head
+(setq peut-publier-variable-head #'my-html-page-title)
+
+;; define a postamble to be used on each page
+(setq peut-publier-body-postamble
+  (concat "   <div id=\"postamble\" class=\"status\">\n"
+      "      <hr/>\n"
+      "      <p>Powered by <a href=\"https://github.com/excalamus/peut-publier\">peut-publier</a></p>\n"
+      "      <p>©" (format-time-string "%Y") " " peut-publier-author "</p>\n"
+      "    </div>\n"))
+
+;; don't list the index or about page in the post listing
+(setq peut-publier--index-exclude '("index" "about"))
+
+;; allow broken links when rendering
+(setq org-export-with-broken-links 'mark)
 ```
 
 ## Extend
