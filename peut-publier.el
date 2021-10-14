@@ -526,7 +526,7 @@ given."
   (interactive
    (let ((page-path (read-file-name
                      "Page file: "
-                     peut-publier-src-directory
+                     (file-name-directory (buffer-file-name))
                      nil
                      t
                      (file-name-nondirectory (buffer-file-name))))
