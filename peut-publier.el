@@ -707,6 +707,24 @@ a new page is not created.
       ;; create new page
       (call-interactively 'peut-publier-new-page))))
 
+(defun peut-publier-preview-page (&optional page-path)
+  "Preview latest published page.
+
+Attempts to find the published version of the current buffer
+unless PAGE-PATH is given."
+  (interactive
+   (let ((page-path (read-file-name
+                     "Preview page: "
+                     peut-publier-publish-directory
+                     nil
+                     t
+                     (concat (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))
+                             ".html"))))
+     (list page-path)))
+  (if (file-exists-p page-path)
+      (browse-url page-path)
+    (message "Invalid file")))
+
 
 ;;; Defaults:
 
