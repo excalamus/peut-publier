@@ -35,7 +35,9 @@ mode](https://orgmode.org/) blog.
 
 `peut-publier` is not currently in [MELPA](https://melpa.org/).
 
-Install `peut-publier` by doing one of the following:
+## Install from source
+
+Install `peut-publier` from source by doing one of the following:
 
 * click the "Code" button on Github, select "Download ZIP", and unzip;
   or
@@ -58,6 +60,15 @@ Finally, load the `peut-publier` package into Emacs:
 
 ```emacs-lisp
 (require 'peut-publier)
+```
+
+## Install using straight.el
+
+After following the straight setup:
+
+```emacs-lisp
+(use-package peut-publier
+  :straight (:repo "git@github.com:excalamus/peut-publier.git"))
 ```
 
 ## Create a new web site
