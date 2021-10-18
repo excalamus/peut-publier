@@ -721,9 +721,15 @@ unless PAGE-PATH is given."
                      (concat (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))
                              ".html"))))
      (list page-path)))
-  (if (file-exists-p page-path)
-      (browse-url page-path)
-    (message "Invalid file")))
+  (let ((page-path (or page-path
+                       (concat
+                        peut-publier-publish-directory
+                        (file-name-nondirectory
+                                (file-name-sans-extension (buffer-file-name)))
+                               ".html"))))
+    (if (file-exists-p page-path)
+        (browse-url page-path)
+      (message "Invalid file: %s" page-path))))
 
 
 ;;; Defaults:
